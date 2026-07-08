@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from dotenv import load_dotenv
 def index(request):
-    template = loader.get_template("test.html")
+    template = loader.get_template("index.html")
 
     # if request.method == "POST":
     #     dark_mode = not dark_mode
@@ -12,6 +12,10 @@ def index(request):
         #"dark_mode": dark_mode,
     }
     return HttpResponse(template.render(context, request))
+
+def faq(request):
+    template = loader.get_template("faq.html")
+    return HttpResponse(template.render({}, request))
 
 def test(request):
     load_dotenv()
