@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+    <head>
+        <title>AI Steam Recommender</title>
+        <link rel="icon" href="{%static 'favicon.svg' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <style>
+        body {
+            font-family: "Segoe UI", system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-section {
+            display: flex;
+            gap: 10px;
+            background: #131924;
+            border-radius: 0 0 10px 10px;
+            box-shadow: rgba(0, 0, 0, 0.7) 0 3px 5px;
+            animation: 1s ease-out 0s header-drop;
+            position: relative;
+        }
+
+        @keyframes header-drop {
+            0% {top: -70px;}
+            100% {top: 0;}
+        }
+
+        .header-title {
+            background: linear-gradient(45deg, #5132ad, #42a3e4);
+            background-clip: text;
+            color: transparent;
+            font-weight: bolder;
+            font-size: 35px;
+            position: relative;
+            margin: 5px 5px 8px 5px;
+            bottom: 1px;
+            text-shadow: rgba(255, 255, 255, 0.25) 0 0 6px;
+
+        }
+
+        .page-body {
+            background-color: #1c2944;
+        }
+
+        .logo_image {
+            background: linear-gradient(45deg, #3c2054, #5132ad);
+            border-radius: 7px;
+            position: relative;
+            top: 8px;
+            left: 8px;
+            padding: 0 3px 3px;
+            width: 40px;
+            height: 40px;
+            margin: 1px 5px 0 1px;
+            box-shadow: rgba(255, 255, 255, 0.15) 0 0 6px;
+        }
+
+    </style>
+
+    <body class="page-body">
+        <div class="header-section">
+            <div><img class="logo_image" src="{% static 'favicon_color.svg' %}" alt="icon"></div>
+            <div><h1 class="header-title">Steam Recommender</h1></div>
+        </div>
+
+        <div class="footer-section"></div>
+    </body>
+</html>
