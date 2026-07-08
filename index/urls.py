@@ -4,6 +4,6 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    #path("test/", views.test, name="test"), # works
+    path("test/", views.test, name="test"), # works
     #path("toggle/", views.toggle_dark_mode, name="toggle_dark_mode"),
 ]
