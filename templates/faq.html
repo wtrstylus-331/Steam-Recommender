@@ -16,6 +16,17 @@
             padding: 0;
         }
 
+        ::-webkit-scrollbar {
+            background-color: #131924;
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: slateblue;
+            border-radius: 5px;
+            box-shadow: black 0 3px 1px;
+        }
+
         .header-section {
             display: flex;
             background: #131924;
@@ -90,6 +101,35 @@
             box-shadow: rgba(255, 255, 255, 0.15) 0 0 6px;
         }
 
+        .sub1 {
+            background: transparent;
+            position: relative;
+            margin-top: 50px;
+            animation: 2s ease-out 1s forwards h1-drop;
+            top: -40px;
+            opacity: 0;
+        }
+
+        .sub1_text {
+            background: linear-gradient(45deg, #5132ad, #42a3e4);
+            background-clip: text;
+            color: transparent;
+            font-weight: bolder;
+            font-size: 70px;
+            position: relative;
+            margin: 5px 5px 8px 3px;
+            text-shadow: rgba(255, 255, 255, 0.25) 0 0 6px;
+            text-align: center;
+            filter: drop-shadow(black 2px 3px);
+        }
+
+        @keyframes h1-drop {
+            to {
+                top: 0;
+                opacity: 100%;
+            }
+        }
+
     </style>
 
     <body class="page-body">
@@ -99,6 +139,16 @@
             <button onclick="window.location.href='{% url 'index' %}'" class="home_btn">
                 <img class="faq_image" src="{% static 'home_color.svg' %}" alt="home">
             </button>
+        </div>
+
+        <div class="sub1">
+            <h1 class="sub1_text">AI influenced Steam <br> game recommendations</h1>
+        </div>
+
+        <div class="sub2">
+            <h2 class="sub2_text">
+                lorem ipsum test <br> test new line
+            </h2>
         </div>
     </body>
 </html>
