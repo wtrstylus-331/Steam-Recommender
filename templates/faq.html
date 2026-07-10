@@ -105,7 +105,7 @@
             background: transparent;
             position: relative;
             margin-top: 30px;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
             animation: 1750ms ease-out 1s forwards h1-drop;
             top: -40px;
             opacity: 0;
@@ -139,7 +139,7 @@
             background-clip: text;
             color: transparent;
             font-weight: bolder;
-            text-shadow: rgba(255, 255, 255, 0.25) 0 0 6px;
+            text-shadow: rgba(255, 255, 255, 0.25) 0 0 3px;
             filter: drop-shadow(black 1px 1px);
             position: relative;
             margin-left: 9%;
@@ -155,11 +155,30 @@
         }
 
         .faq_desc {
+            background: transparent;
+            border: transparent;
+            background: linear-gradient(45deg, #5665e5, #5b71e4);
+            background-clip: text;
+            font-weight: bolder;
+            color: transparent;
+            text-shadow: rgba(255, 255, 255, 0.25) 0 0 3px;
+            filter: drop-shadow(black 1px 1px);
             overflow-wrap: normal;
             opacity: 0;
             margin-left: 15%;
             margin-right: 21%;
             animation: 1500ms ease-out 2250ms forwards slide-desc;
+        }
+
+        .faq_desc a {
+            color: #42a3e4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .faq_desc a:hover {
+            color: #7bc7ff;
+            text-decoration: underline;
         }
         
         @keyframes slide-desc {
@@ -185,15 +204,15 @@
 
         <button class="faq_btn">● How it works</button>
         <h3 class="faq_desc">
-            how it works
+            Providing a valid link to a Steam profile allows this application to communicate with the Steam Web API and OpenAI API, furthermore allowing the latter to generate AI based game recommendations based on various stats from the User's profile.
         </h3>
         <button class="faq_btn">● Security Concerns</button>
         <h3 class="faq_desc">
-            security
+            All API keys must be accessed through a .env file within this source directory, to ensure the security of the usage of personal API keys. Steam Web API is accessed as a wrapper through a third party <a href="https://github.com/ValvePython/steam" target="_blank">Steam Python library</a>.
         </h3>
         <button class="faq_btn">● Data Usage</button>
         <h3 class="faq_desc">
-            data usage
+            Data collected is only from the Steam profile, including inventory, user stats, and game library stats. Additional information provided by the User through this application may be used for more accurate suggestions from the OpenAI API.
         </h3>
     </body>
 </html>
