@@ -101,6 +101,64 @@
             box-shadow: rgba(255, 255, 255, 0.15) 0 0 6px;
         }
 
+        .url-input h3{
+            width: 100%;
+            align-items: center;
+            text-align-all: center;
+            background: linear-gradient(45deg, #5132ad, #42a3e4);
+            background-clip: text;
+            color: transparent;
+            font-weight: bolder;
+            text-shadow: rgba(255, 255, 255, 0.25) 0 0 3px;
+            font-size: 28px;
+        }
+
+        #steam_url_input {
+            font-family: "Segoe UI", system-ui, sans-serif;
+            display: block;
+            margin-left: auto;
+            margin-right: 20px;
+            border-radius: 15px;
+            width: 40vw;
+            height: 24px;
+            outline: none;
+            font-size: 18px;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-top: -15px;
+            background: #131924;
+            border-color: #131021;
+            filter: drop-shadow(black 0 3px 5px);
+            color: lightgray;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-bottom: 2px;
+        }
+
+        #submit_url_btn {
+            font-family: "Segoe UI", system-ui, sans-serif;
+            margin-right: auto;
+            position: relative;
+            bottom: 12px;
+            border-radius: 10px;
+            background: #131924;
+            border-color: #131021;
+            border-style: inset;
+            border-width: 2px;
+            filter: drop-shadow(black 0 3px 5px);
+            color: lightgray;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 2px 8px 4px;
+        }
+
+        #submit_url_btn:hover {
+            transition-duration: 250ms;
+            font-size: 15px;
+            bottom: 15px;
+        }
+
     </style>
 
     <body class="page-body">
@@ -112,8 +170,19 @@
             </button>
         </div>
 
-        <div class="faq-section">
+        <div class="url-input">
+            <h3 style="text-align: center">Enter Steam Profile URL:</h3>
+            <div style="display: flex; justify-content: center">
+                <input type="text" value="" id="steam_url_input">
+                <button id="submit_url_btn" onclick="test()">Submit</button>
+            </div>
         </div>
     </body>
+
+    <script>
+        function test() {
+            window.alert('test lol!')
+        }
+    </script>
 
 </html>
