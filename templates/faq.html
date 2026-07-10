@@ -104,8 +104,9 @@
         .sub1 {
             background: transparent;
             position: relative;
-            margin-top: 50px;
-            animation: 2s ease-out 1s forwards h1-drop;
+            margin-top: 30px;
+            margin-bottom: 60px;
+            animation: 1750ms ease-out 1s forwards h1-drop;
             top: -40px;
             opacity: 0;
         }
@@ -115,7 +116,7 @@
             background-clip: text;
             color: transparent;
             font-weight: bolder;
-            font-size: 70px;
+            font-size: 60px;
             position: relative;
             margin: 5px 5px 8px 3px;
             text-shadow: rgba(255, 255, 255, 0.25) 0 0 6px;
@@ -130,6 +131,43 @@
             }
         }
 
+        .faq_btn {
+            background: transparent;
+            border: transparent;
+            font-size: 30px;
+            background: linear-gradient(45deg, #5665e5, #5b71e4);
+            background-clip: text;
+            color: transparent;
+            font-weight: bolder;
+            text-shadow: rgba(255, 255, 255, 0.25) 0 0 6px;
+            filter: drop-shadow(black 1px 1px);
+            position: relative;
+            margin-left: 9%;
+            opacity: 0;
+            animation: 1500ms ease-out 2250ms forwards slide-btn;
+        }
+        
+        @keyframes slide-btn {
+            to {
+                margin-left: 15%;
+                opacity: 100%;
+            }
+        }
+
+        .faq_desc {
+            overflow-wrap: normal;
+            opacity: 0;
+            margin-left: 15%;
+            margin-right: 21%;
+            animation: 1500ms ease-out 2250ms forwards slide-desc;
+        }
+        
+        @keyframes slide-desc {
+            to {
+                margin-left: 21%;
+                opacity: 100%;
+            }
+        }
     </style>
 
     <body class="page-body">
@@ -145,10 +183,17 @@
             <h1 class="sub1_text">AI influenced Steam <br> game recommendations</h1>
         </div>
 
-        <div class="sub2">
-            <h2 class="sub2_text">
-                lorem ipsum test <br> test new line
-            </h2>
-        </div>
+        <button class="faq_btn">● How it works</button>
+        <h3 class="faq_desc">
+            how it works
+        </h3>
+        <button class="faq_btn">● Security Concerns</button>
+        <h3 class="faq_desc">
+            security
+        </h3>
+        <button class="faq_btn">● Data Usage</button>
+        <h3 class="faq_desc">
+            data usage
+        </h3>
     </body>
 </html>
