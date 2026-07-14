@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
+from django.core.management.utils import get_random_secret_key
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,10 +26,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
+if not SECRET_KEY:
+    SECRET_KEY = get_random_secret_key()
+
+    env_path = BASE_DIR / ".env"
+    if not env_path.exists():
+        with open(env_path, "w") as file:
+            file.write(f'DJANGO_SECRET_KEY="{SECRET_KEY}"\n')
+            file.write('STEAM_WEB_API_KEY=""\n')
+            file.write('OPENAI_API_KEY=""\n')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
