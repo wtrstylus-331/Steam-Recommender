@@ -8,6 +8,6 @@ class IndexConfig(AppConfig):
     name = "index"
 
     def ready(self):
-        OpenAIInstance.instance()
-        SteamWebInstance.instance()
-        SteamProfileInstance.instance()
+        OpenAIInstance()
+        SteamWebInstance()
+        SteamProfileInstance()
