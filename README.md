@@ -1,2 +1,2 @@
-# steam_ai_djangoapp
+# Steam Recommender 
 
