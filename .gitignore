@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# local api/data referencing
+web_api_ref.json
+sample_game_info.json
+cdn_capsule_routes.txt
+
 # C extensions
 *.so
 
