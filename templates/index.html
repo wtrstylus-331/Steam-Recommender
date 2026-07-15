@@ -8,6 +8,7 @@
         <link rel="icon" href="{%static 'images/favicon.svg' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="{% static 'stylesheets/index.css' %}">
+        <script src="{% static 'script/index.js' %}"></script>
     </head>
 
     <body class="page-body">
@@ -22,35 +23,18 @@
         <div class="url-input">
             <h3>Enter Steam Profile URL:</h3>
             <div style="display: flex; justify-content: center">
-                <input type="text" value="" id="steam_url_input">
+                <input type="text" value="" id="steam_url_input" onfocusin="focus_in()" onfocusout="focus_out()" placeholder="https://steamcommunity.com/...">
                 <button id="submit_url_btn" onclick="validate_url()">Submit</button>
             </div>
         </div>
+
+        <div class="invalid-label" id="err_url_label">
+            <h2>Invalid URL</h2>
+        </div>
+
+        <div class="extra-display" id="ext_display">
+            <h3>Valid Steam URL Formats:<br><br>    - https://steamcommunity.com/profiles/76561....<br>    - https://steamcommunity.com/id/abc123...</h3>
+        </div>
     </body>
-
-    <script>
-        function validate_url() {
-            // gets the text input
-            let text = document.getElementById('steam_url_input').value.trim()
-            //let valid = true
-
-            if (text) {
-                window.location.href = `?url=${encodeURIComponent(text)}`
-            }
-
-            {#if (!text.startsWith('https://steamcommunity.com/') &&#}
-            {#    !text.startsWith('http://steamcommunity.com/')) {#}
-            {#    return#}
-            {##}
-            {##}
-            {#if (!text.includes("/profiles/") && !text.includes("/id/")) {#}
-            {#    return#}
-            {##}
-
-            {#if (valid) {#}
-            {#    window.location.href = `?url=${encodeURIComponent(text)}`#}
-            {##}
-        }
-    </script>
 
 </html>
