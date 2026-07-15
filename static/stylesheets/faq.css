@@ -33,7 +33,7 @@ body {
 }
 
 .header-title {
-    background: linear-gradient(45deg, #b40b04, chartreuse);
+    background: linear-gradient(45deg, #5132ad, #42a3e4);
     background-clip: text;
     color: transparent;
     font-weight: bolder;
@@ -132,7 +132,7 @@ body {
     position: relative;
     margin-left: 9%;
     opacity: 0;
-    /*animation: 1500ms ease-out 2250ms forwards slide-btn;*/
+    animation: 1500ms ease-out 2250ms forwards slide-btn;
 }
 
 @keyframes slide-btn {
@@ -152,10 +152,10 @@ body {
     overflow-wrap: normal;
     opacity: 0;
     position: relative;
-    left: -5vw;
+    left: -6vw;
     margin-left: 21%;
     margin-right: 21%;
-    /*animation: 1500ms ease-out 2250ms forwards slide-desc;*/
+    animation: 1500ms ease-out 2250ms forwards slide-desc;
 }
 
 .faq_desc a {
@@ -169,12 +169,10 @@ body {
     text-decoration: underline;
 }
 
-/*
+
 @keyframes slide-desc {
     to {
         left: 0;
         opacity: 100%;
     }
 }
-
- */
