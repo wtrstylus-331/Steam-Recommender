@@ -68,13 +68,12 @@ body {
     margin-top: 1px;
     border-radius: 8px;
     cursor: pointer;
-    transition-duration: 250ms;
+    transition-duration: 500ms;
 }
 
 .faq_btn:hover{
     box-shadow: rgba(255, 255, 255, 0.2) 1px 2px 10px;
     .faq_image {
-        transition-duration: 250ms;
         width: 38px;
         height: 38px;
     }
@@ -87,6 +86,7 @@ body {
     width: 35px;
     height: 35px;
     box-shadow: rgba(255, 255, 255, 0.15) 0 0 6px;
+    transition-duration: 500ms;
 }
 
 .url-input {
@@ -139,7 +139,9 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     padding-bottom: 2px;
+    transition-duration: 500s;
 }
+
 
 #submit_url_btn {
     font-family: "Segoe UI", system-ui, sans-serif;
@@ -157,10 +159,68 @@ body {
     font-size: 12px;
     padding: 5px 11px 7px;
     cursor: pointer;
+    transition-duration: 300ms;
 }
 
 #submit_url_btn:hover {
-    transition-duration: 250ms;
+    transition-duration: 300ms;
     font-size: 15px;
     bottom: 17px;
+}
+
+.extra-display {
+    background: linear-gradient(45deg, #5132ad, #42a3e4);
+    background-clip: text;
+    color: transparent;
+    font-weight: bolder;
+    font-size: 11px;
+    position: relative;
+    /*margin: auto;*/
+    text-align: center;
+    text-shadow: rgba(255, 255, 255, 0.15) 0 0 4px;
+}
+
+#ext_display {
+    opacity: 0;
+    transition: opacity 250ms ease;
+    user-select: none;
+}
+
+.invalid-label {
+    background: linear-gradient(45deg, #b40b04, #b43922);
+    background-clip: text;
+    color: transparent;
+    font-weight: bolder;
+    font-size: 11px;
+    position: relative;
+    margin-top: -10px;
+    text-align: center;
+    text-shadow: rgba(255, 255, 255, 0.15) 0 0 4px;
+}
+
+@keyframes show_invalid_label {
+    0% {
+        margin-top: -15px;
+        opacity: 0;
+    }
+    20% {
+        margin-top: -10px;
+        opacity: 100%;
+    }
+    80% {
+        margin-top: -10px;
+        opacity: 100%;
+    }
+    100% {
+        margin-top: -15px;
+        opacity: 0;
+    }
+}
+
+#err_url_label {
+    opacity: 0;
+    animation-duration: 500ms;
+    transition: 250ms ease;
+    user-select: none;
+    animation-iteration-count: revert;
 }
