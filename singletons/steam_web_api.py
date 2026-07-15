@@ -24,7 +24,8 @@ class SteamWebInstance:
         self._initialized = True
 
     def id_from_vanity_url(self, vanity_id: str) -> int:
-        return self.web_api.call('ISteamUser.ResolveVanityURL', vanityurl=vanity_id, url_type=1)
+        res = dict(self.web_api.call('ISteamUser.ResolveVanityURL', vanityurl=vanity_id, url_type=1))
+        return int(res['response']['steamid'])
 
     def get_summary_from_id(self, steamid: int) -> dict:
         return self.web_api.call('ISteamUser.GetPlayerSummaries', key=self.api_key, steamids=steamid)
