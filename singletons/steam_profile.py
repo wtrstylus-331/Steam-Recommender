@@ -1,4 +1,7 @@
 # main web instance for inputted profile to display game inventory, stats, etc.
+from typing import Optional
+from singletons.steam_web_api import SteamWebInstance
+
 class SteamGame:
     # attributes
     app_id: int
@@ -34,8 +37,8 @@ class SteamProfileInstance:
     _initialized = False
 
     # attributes
-    steam_id: int
-    steam_name: str
+    steam_profile_id: Optional[int]
+    steam_profile_name: Optional[str]
     steam_avatar_url: str
     steam_games: list[SteamGame]
 
@@ -44,11 +47,16 @@ class SteamProfileInstance:
             cls._instance = super(SteamProfileInstance, cls).__new__(cls)
         return cls._instance
 
-    def __init__(self):
+    def __init__(self, steam_id: int=None):
         if self._initialized:
             return
 
-        self.steam_profile_id = None
+        if steam_id:
+            self.steam_profile_id = steam_id
+            summary: dict = SteamWebInstance().get_summary_from_id(steam_id)
+            self.set_profile(summary)
+        else:
+            self.steam_profile_id = None
         self.steam_profile_name = None
         self.steam_avatar_url = ""
         self.steam_games = []
