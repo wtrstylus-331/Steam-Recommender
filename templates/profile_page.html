@@ -4,13 +4,28 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>AI Steam Recommender | {{ persona_name }}</title>
+        <title>Steam Recommender | Profile</title>
         <link rel="icon" href="{%static 'images/favicon.svg' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--link rel="stylesheet" href="{//% static 'stylesheets/index.css' %}"-->
+        <link rel="stylesheet" href="{% static 'stylesheets/profile_page.css' %}">
     </head>
 
-    <body>
+    <body class="page-body">
+        <div class="header-section">
+            <div><img class="logo_image" src="{% static 'images/favicon_color.svg' %}" alt="icon"></div>
+            <div><h1 class="header-title">Steam Profile</h1></div>
+            <button onclick="window.location.href='{% url 'faq' %}'" class="faq_btn" id="faq_btn_id">
+                <img class="faq_image" src="{% static 'images/question_color.svg' %}" alt="faq">
+            </button>
+        </div>
 
+        <div class="user-section">
+            <img class="user_avatar" src="{{ avatar_url }}" alt="user avatar">
+            <div class="user-info-texts">
+                <h1 class="steam_persona">{{ persona_name }}</h1>
+                <h4 class="steam_id">ID: {{ steam_id }}</h4>
+                <h3 class="steam_game_count">Owned Games: {{ game_count }}</h3>
+            </div>
+        </div>
     </body>
 </html>
