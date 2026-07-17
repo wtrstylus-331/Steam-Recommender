@@ -1,6 +1,5 @@
 # main web instance for inputted profile to display game inventory, stats, etc.
-from typing import Optional
-from singletons.steam_web_api import SteamWebInstance
+from typing import Optional, Union
 
 class SteamGame:
     # attributes
@@ -41,37 +40,68 @@ class SteamProfileInstance:
     steam_profile_name: Optional[str]
     steam_avatar_url: str
     steam_games: list[SteamGame]
+    steam_game_count: int
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
             cls._instance = super(SteamProfileInstance, cls).__new__(cls)
         return cls._instance
 
-    def __init__(self, steam_id: int=None):
+    def __init__(self, summary: dict=None):
         if self._initialized:
             return
 
-        if steam_id:
-            self.steam_profile_id = steam_id
-            summary: dict = SteamWebInstance().get_summary_from_id(steam_id)
+        if summary:
             self.set_profile(summary)
         else:
             self.steam_profile_id = None
-        self.steam_profile_name = None
-        self.steam_avatar_url = ""
+            self.steam_profile_name = None
+            self.steam_avatar_url = ""
         self.steam_games = []
+        self.steam_game_count = 0
 
         self._initialized = True
 
     def set_profile(self, response: dict) -> None:
-        """Take in raw dictionary <response> from the WebAPI call
-        from ValvePython and set instance attributes"""
-
-        details: dict = response["response"]["players"][0]
+        """Take in raw dictionary <response> from the ISteamUser.GetPlayerSummaries method call."""
+        details: dict = ((response.get("response")).get("players"))[0]
         self.steam_profile_id = int(details["steamid"])
         self.steam_profile_name = details["personaname"]
         self.steam_avatar_url = details["avatarfull"]
 
-    def add_game(self, game: SteamGame) -> None:
+    def set_games(self, response: dict) -> None:
+        """Take in raw dictionary <response> from the SteamUser.GetOwnedGames method call."""
+        self.steam_game_count = int((response.get("response")).get("game_count"))
+        games: list[dict] = (response.get("response")).get("games")
+
+        for entry in games:
+            appid: int = int(entry.get("appid"))
+            name: str = entry.get("name")
+            playtime_forever: int = int(entry.get("playtime_forever"))
+            playtime_2weeks: Union[int, None] = entry.get("playtime_2weeks", None)
+            capsule_hash: str = entry.get("img_icon_url")
+
+            g_instance = SteamGame(appid, name, capsule_hash, playtime_forever)
+            if playtime_2weeks:
+                g_instance.set_playtime_2weeks(int(playtime_2weeks))
+
+            self._add_game(g_instance)
+
+    def get_games(self) -> list[SteamGame]:
+        return self.steam_games
+
+    def reset_games(self) -> None:
+        self.steam_games = []
+
+    def sort_games_by_appid(self) -> None:
+        self.steam_games.sort(key=lambda x: x.app_id, reverse=False)
+
+    def sort_games_by_name(self) -> None:
+        self.steam_games.sort(key=lambda x: x.app_name, reverse=False)
+
+    def sort_games_by_playtime(self, descending: bool=False) -> None:
+        self.steam_games.sort(key=lambda x: x.playtime_forever, reverse=descending)
+
+    def _add_game(self, game: SteamGame) -> None:
         self.steam_games.append(game)
         self.steam_games.sort(key=lambda x: x.app_name, reverse=False)
