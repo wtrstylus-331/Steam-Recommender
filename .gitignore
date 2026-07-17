@@ -7,6 +7,8 @@ __pycache__/
 web_api_ref.json
 sample_game_info.json
 cdn_capsule_routes.txt
+sample_player_summary.json
+sample_appdetails.json
 
 # C extensions
 *.so
