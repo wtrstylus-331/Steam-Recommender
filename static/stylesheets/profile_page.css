@@ -207,6 +207,7 @@ body {
 .owned-grid {
     display: grid;
     background: #131924;
+    grid-template-columns: repeat(8, 1fr);
     padding: 10px;
     border-radius: 0 0 15px 15px;
     box-shadow: rgba(0, 0, 0, 1) 0 5px 5px;
