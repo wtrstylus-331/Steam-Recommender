@@ -8,6 +8,7 @@
         <link rel="icon" href="{%static 'images/favicon.svg' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="{% static 'stylesheets/profile_page.css' %}">
+        <script src="{% static 'script/profile_page.js' %}"></script>
     </head>
 
     <body class="page-body">
@@ -25,6 +26,28 @@
                 <h1 class="steam_persona">{{ persona_name }}</h1>
                 <h4 class="steam_id">ID: {{ steam_id }}</h4>
                 <h3 class="steam_game_count">Owned Games: {{ game_count }}</h3>
+            </div>
+        </div>
+
+        <div class="recently-played">
+            <h2 class="recent-h2" style="border-radius: {% if recent_game_count > 0 %} 15px 15px 0 0 {% else %} 15px {% endif %}"><span>Recently Played Games: {{ recent_game_count }}</span></h2>
+            <div class="recent-grid" style="opacity: {% if recent_game_count > 0 %} 100% {% else %} 0 {% endif %}">
+                {% if recent_game_count > 0 %}
+                    {% for entry in games_list %}
+                        <div class="game-card">
+                            <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{ entry.app_id }}/library_600x900.jpg" alt="image" class="game-image" onerror="image_load_error({{ entry.app_name }})')">
+                            <!--img src="https://media.steampowered.com/steamcommunity/public/images/apps/{{ entry.app_id }}/{{ entry.app_capsule_hash }}.jpg" alt="image" class="game-image"-->
+                            <h3 class="game-name">{{ entry.app_name }}</h3>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="owned-games-div">
+            <h2 class="owned-h2" style="border-radius: {% if game_count > 0 %} 15px 15px 0 0 {% else %} 15px {% endif %}"><span>Games: {{ game_count }}</span></h2>
+            <div class="owned-grid" style="opacity: {% if game_count > 0 %} 100% {% else %} 0 {% endif %}">
+
             </div>
         </div>
     </body>
