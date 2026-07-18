@@ -91,6 +91,7 @@ body {
 
 .user-section {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     margin-top: 25px;
     background: #131924;
@@ -115,6 +116,7 @@ body {
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 1) 0 0 6px;
     margin-right: 0.7vw;
+    flex-shrink: 0;
     width: 10vw;
     height: 10vw;
     position: relative;
@@ -122,8 +124,12 @@ body {
 
 .steam_persona {
     margin-left: 0.7vw;
+    margin-right: 0;
     margin-bottom: 0;
-    font-size: 1.7vw;
+    font-size: 1.4vw;
+    max-width: 10vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .steam_id {
@@ -135,4 +141,100 @@ body {
 .steam_game_count {
     margin-left: 0.7vw;
     font-size: 1.2vw;
+}
+
+.recently-played {
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.recent-h2 {
+    background: #131924;
+    margin-bottom: 0;
+    border-radius: 15px 15px 0 0;
+    padding-top: 10px;
+    box-shadow: rgba(0, 0, 0, 1) 0 5px 5px;
+    padding-bottom: 10px;
+}
+
+.recent-h2 span{
+    background: linear-gradient(45deg, #5132ad, #42a3e4);
+    background-clip: text;
+    color: transparent;
+    font-weight: bold;
+    text-shadow: rgba(255, 255, 255, 0.25) 0 0 4px;
+    margin-bottom: 5px;
+    padding-left: 20px;
+}
+
+.recent-grid {
+    display: grid;
+    background: #131924;
+    grid-template-columns: repeat(8, 1fr);
+    padding: 10px;
+    border-radius: 0 0 15px 15px;
+    box-shadow: rgba(0, 0, 0, 1) 0 5px 5px;
+}
+
+.owned-games-div {
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.owned-h2 {
+    background: #131924;
+    margin-bottom: 0;
+    border-radius: 15px 15px 0 0;
+    padding-top: 10px;
+    box-shadow: rgba(0, 0, 0, 1) 0 5px 5px;
+    padding-bottom: 10px;
+}
+
+.owned-h2 span{
+    background: linear-gradient(45deg, #5132ad, #42a3e4);
+    background-clip: text;
+    color: transparent;
+    font-weight: bold;
+    text-shadow: rgba(255, 255, 255, 0.25) 0 0 4px;
+    margin-bottom: 5px;
+    padding-left: 20px;
+}
+
+.owned-grid {
+    display: grid;
+    background: #131924;
+    padding: 10px;
+    border-radius: 0 0 15px 15px;
+    box-shadow: rgba(0, 0, 0, 1) 0 5px 5px;
+}
+
+.game-card {
+    /*width: 8vw;
+    margin: auto;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* fill the grid cell */
+}
+
+.game-image {
+    width: 8vw;
+    border-radius: 10px;
+    margin-top: 2px;
+}
+
+.game-name {
+    text-align: center;
+    font-size: 1.1vw;
+    margin-top: 2px;
+    margin-bottom: 5px;
+    background: linear-gradient(45deg, #5132ad, #42a3e4);
+    background-clip: text;
+    color: transparent;
+    font-weight: bolder;
+    text-shadow: rgba(255, 255, 255, 0.25) 0 0 4px;
 }
