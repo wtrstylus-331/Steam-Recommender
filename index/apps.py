@@ -1,7 +1,6 @@
 from django.apps import AppConfig
-from singletons.steam_web_api import SteamWebInstance
-from singletons.openai_instance import OpenAIInstance
-from singletons.steam_profile import SteamProfileInstance
+from instances.steam_web_api import SteamWebInstance
+from instances.openai_instance import OpenAIInstance
 
 
 class IndexConfig(AppConfig):
@@ -10,4 +9,3 @@ class IndexConfig(AppConfig):
     def ready(self):
         OpenAIInstance()
         SteamWebInstance()
-        SteamProfileInstance()
