@@ -60,6 +60,7 @@ def profile(request):
 
     if steam_profile_instance.steam_profile_id:
         steam_profile_instance.set_games(SteamWebInstance().get_user_owned_games(steam_profile_instance.steam_profile_id))
+        steam_profile_instance.sort_games_by_name()
 
     context = {
         'steam_id': steam_profile_instance.steam_profile_id,
