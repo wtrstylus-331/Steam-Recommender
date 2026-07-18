@@ -1,10 +1,9 @@
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 
-from singletons.steam_profile import SteamProfileInstance
-from singletons.steam_web_api import SteamWebInstance, genres_from_appid
+from instances.steam_profile import SteamProfileInstance
+from instances.steam_web_api import SteamWebInstance, misc_app_details
 import re, pprint
-
 def index(request):
     template = loader.get_template("index.html")
     return HttpResponse(template.render({}, request))
@@ -35,7 +34,8 @@ def validate_url(request):
         else:
             steamid = steam_instance.id_from_vanity_url(result.groups()[0])
 
-        SteamProfileInstance().set_profile(steam_instance.get_summary_from_id(steamid))
+        steam_instance.set_summary_from_id(steamid)
+        request.session["steamid"] = steamid
         return JsonResponse({
             "valid_url": True,
             "steamid": steamid,
@@ -49,17 +49,24 @@ def faq(request):
     return HttpResponse(template.render({}, request))
 
 def profile(request):
+    steamid = request.session["steamid"]
     template = loader.get_template("profile_page.html")
-    profile_inst = SteamProfileInstance()
+    steam_profile_instance = SteamProfileInstance()
 
-    if profile_inst.steam_profile_id:
-        profile_inst.set_games(SteamWebInstance().get_user_owned_games(profile_inst.steam_profile_id))
+    if not steamid:
+        return index(request)
+
+    steam_profile_instance.set_profile(SteamWebInstance().profile_summary)
+
+    if steam_profile_instance.steam_profile_id:
+        steam_profile_instance.set_games(SteamWebInstance().get_user_owned_games(steam_profile_instance.steam_profile_id))
 
     context = {
-        'steam_id': profile_inst.steam_profile_id,
-        'persona_name': profile_inst.steam_profile_name,
-        'avatar_url': profile_inst.steam_avatar_url,
-        'games_list': profile_inst.get_games(),
-        'game_count': profile_inst.steam_game_count
+        'steam_id': steam_profile_instance.steam_profile_id,
+        'persona_name': steam_profile_instance.steam_profile_name,
+        'avatar_url': steam_profile_instance.steam_avatar_url,
+        'games_list': steam_profile_instance.get_games(),
+        'game_count': steam_profile_instance.steam_game_count,
+        'recent_game_count': steam_profile_instance.recent_game_count
     }
     return HttpResponse(template.render(context, request))
