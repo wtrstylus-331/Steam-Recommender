@@ -6,13 +6,15 @@ class SteamGame:
     app_id: int
     app_name: str
     app_capsule_hash: str
+    capsule_file_name: str
     playtime_forever: int # minutes
     playtime_2weeks: int # optional, minutes
 
-    def __init__(self, app_id: int, app_name: str, app_capsule_hash: str, playtime_forever: int):
+    def __init__(self, app_id: int, app_name: str, app_capsule_hash: str, capsule_file_name: str, playtime_forever: int):
         self.app_id = app_id
         self.app_name = app_name
         self.app_capsule_hash = app_capsule_hash
+        self.capsule_file_name = capsule_file_name
         self.playtime_forever = playtime_forever
         self.playtime_2weeks = -1
 
@@ -103,8 +105,9 @@ class SteamProfileInstance:
             playtime_forever: int = int(games_list[i].get("playtime_forever"))
             playtime_2weeks: Union[int, None] = games_list[i].get("playtime_2weeks", None)
             capsule_hash: str = games_list[i].get("img_icon_url")
+            capsule_file_name: str = games_list[i].get("capsule_filename")
 
-            g_instance = SteamGame(appid, name, capsule_hash, playtime_forever)
+            g_instance = SteamGame(appid, name, capsule_hash, capsule_file_name, playtime_forever)
             if playtime_2weeks:
                 g_instance.set_playtime_2weeks(int(playtime_2weeks))
 
