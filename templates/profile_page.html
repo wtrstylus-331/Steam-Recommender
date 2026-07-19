@@ -37,6 +37,7 @@
                         {% if entry.playtime_2weeks > 0 %}
                             <div class="game-card">
                                 <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{ entry.app_id }}/library_600x900.jpg" alt="image" class="game-image" onerror="image_load_error({{ entry.app_name }})">
+                                <!--img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{ entry.app_id }}/{{ entry.capsule_file_name }}" alt="image" class="game-image" onerror="image_load_error({{ entry.app_name }})"-->
                                 <!--img src="https://media.steampowered.com/steamcommunity/public/images/apps/{{ entry.app_id }}/{{ entry.app_capsule_hash }}.jpg" alt="image" class="game-image"-->
                                 <h3 class="game-name">{{ entry.app_name }}</h3>
                             </div>
