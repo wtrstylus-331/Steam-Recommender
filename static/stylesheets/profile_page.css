@@ -4,6 +4,10 @@ body {
     padding: 0;
 }
 
+footer {
+    margin-top: 50px;
+}
+
 ::-webkit-scrollbar {
     background-color: #131924;
     width: 10px;
@@ -145,6 +149,9 @@ body {
 .steam_game_count {
     margin-left: 0.7vw;
     font-size: 1.2vw;
+    max-width: 10vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
     transform: translateZ(0);
 }
 
@@ -152,15 +159,16 @@ body {
     width: 85%;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 30px;
 }
 
 .recent-h2 {
     background: #131924;
     margin-bottom: 0;
     border-radius: 15px 15px 0 0;
-    padding-top: 10px;
+    padding-top: 1%;
     box-shadow: rgba(0, 0, 0, 1) 0 5px 5px;
-    padding-bottom: 10px;
+    padding-bottom: 1%;
 }
 
 .recent-h2 span{
@@ -169,8 +177,9 @@ body {
     color: transparent;
     font-weight: bold;
     text-shadow: rgba(255, 255, 255, 0.25) 0 0 4px;
-    margin-bottom: 5px;
-    padding-left: 20px;
+    margin-bottom: 0;
+    padding-left: 1em;
+    font-size: 1.8vw;
 }
 
 .recent-grid {
@@ -187,16 +196,16 @@ body {
     margin-left: auto;
     margin-right: auto;
     margin-top: 50px;
-    margin-bottom: 100px;
+    margin-bottom: 10px;
 }
 
 .owned-h2 {
     background: #131924;
     margin-bottom: 0;
     border-radius: 15px 15px 0 0;
-    padding-top: 10px;
+    padding-top: 1%;
     box-shadow: rgba(0, 0, 0, 1) 0 5px 5px;
-    padding-bottom: 10px;
+    padding-bottom: 1%;
 }
 
 .owned-h2 span{
@@ -205,8 +214,9 @@ body {
     color: transparent;
     font-weight: bold;
     text-shadow: rgba(255, 255, 255, 0.25) 0 0 4px;
-    margin-bottom: 5px;
-    padding-left: 20px;
+    margin-bottom: 0;
+    padding-left: 1em;
+    font-size: 1.8vw;
 }
 
 .owned-grid {
@@ -218,24 +228,68 @@ body {
     box-shadow: rgba(0, 0, 0, 1) 0 5px 5px;
 }
 
-.game-card {
+.owned-display-btn {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    display: flex;
+    font-size: 1.5vw;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: #131924;
+    border-color: #131021;
+    border-style: inset;
+    border-width: .1em;
+    border-radius: .5em;
+    padding-left: .5em;
+    padding-right: .5em;
+    padding-bottom: .3em;
+    color: lightgray;
+    cursor: pointer;
+    transition-duration: 300ms;
+    filter: drop-shadow(black 0 3px 5px);
+}
+
+.owned-display-btn:hover {
+    transition-duration: 300ms;
+    font-size: 1.6vw;
+}
+
+.owned-display-btn span{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.owned-game-card {
     /*width: 8vw;
     margin: auto;*/
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%; /* fill the grid cell */
+    width: 100%;
+}
+
+.recent-game-card {
+    /*width: 8vw;
+    margin: auto;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
 .game-image {
-    width: 8vw;
+    width: 6.5vw;
     border-radius: 10px;
     margin-top: 2px;
 }
 
 .game-name {
     text-align: center;
-    font-size: 1.1vw;
+    font-size: 0.9vw;
     margin-top: 2px;
     margin-bottom: 5px;
     background: linear-gradient(45deg, #5132ad, #42a3e4);
