@@ -69,7 +69,9 @@ class SteamProfileInstance:
     def set_games(self, response: dict) -> None:
         """Take in raw dictionary <response> from the SteamUser.GetOwnedGames method call."""
         print(response)
-        if not response.get("response"):
+        if not response.get("response"): #profile is privated (?)
+            self.steam_game_count = -1
+            self.recent_game_count = -1
             return
 
         try:
@@ -87,6 +89,8 @@ class SteamProfileInstance:
         # except TypeError as e:
         #     pass
         except Exception as e:
+            self.steam_game_count = -2
+            self.recent_game_count = -2
             return
 
         # match self.steam_game_count:
