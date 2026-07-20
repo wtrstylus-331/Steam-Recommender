@@ -25,17 +25,17 @@
             <div class="user-info-texts">
                 <h1 class="steam_persona">{{ persona_name }}</h1>
                 <h4 class="steam_id">ID: {{ steam_id }}</h4>
-                <h3 class="steam_game_count">Owned Games: {{ game_count }}</h3>
+                <h3 class="steam_game_count">Owned Games: {% if game_count > 0 %} {{ game_count }} {% elif game_count < 0%} Private {% endif %}</h3>
             </div>
         </div>
 
         <div class="recently-played">
-            <h2 class="recent-h2" style="border-radius: {% if recent_game_count > 0 %} 15px 15px 0 0 {% else %} 15px {% endif %}"><span>Recently Played Games: {{ recent_game_count }}</span></h2>
+            <h2 class="recent-h2" style="border-radius: {% if recent_game_count > 0 %} 15px 15px 0 0 {% else %} 15px {% endif %}"><span>Recently Played Games: {% if game_count > 0 %} {{ recent_game_count }} {% elif game_count < 0%} Private {% endif %}</span></h2>
             <div class="recent-grid" style="opacity: {% if recent_game_count > 0 %} 100% {% else %} 0 {% endif %}">
                 {% if recent_game_count > 0 %}
                     {% for entry in games_list %}
                         {% if entry.playtime_2weeks > 0 %}
-                            <div class="game-card">
+                            <div class="recent-game-card">
                                 <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{ entry.app_id }}/library_600x900.jpg" alt="image-{{ entry.app_name }}" class="game-image" onerror="image_load_error(this)">
                                 <!--img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{ entry.app_id }}/{{ entry.capsule_file_name }}" alt="image" class="game-image" onerror="image_load_error({{ entry.app_name }})"-->
                                 <!--img src="https://media.steampowered.com/steamcommunity/public/images/apps/{{ entry.app_id }}/{{ entry.app_capsule_hash }}.jpg" alt="image" class="game-image"-->
@@ -48,11 +48,12 @@
         </div>
 
         <div class="owned-games-div">
-            <h2 class="owned-h2" style="border-radius: {% if game_count > 0 %} 15px 15px 0 0 {% else %} 15px {% endif %}"><span>Games: {{ game_count }}</span></h2>
+            <h2 class="owned-h2" style="border-radius: {% if game_count > 0 %} 15px 15px 0 0 {% else %} 15px {% endif %}"><span>Games: {% if game_count > 0 %} {{ game_count }} {% elif game_count < 0%} Private {% endif %}</span></h2>
+
             <div class="owned-grid" style="opacity: {% if game_count > 0 %} 100% {% else %} 0 {% endif %}">
                 {% if game_count > 0 %}
                     {% for entry in games_list %}
-                        <div class="game-card">
+                        <div class="owned-game-card" style="display: none;">
                             <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{ entry.app_id }}/library_600x900.jpg" alt="image-{{ entry.app_name }}" class="game-image" onerror="image_load_error(this)">
                             <!--img src="https://media.steampowered.com/steamcommunity/public/images/apps/{{ entry.app_id }}/{{ entry.app_capsule_hash }}.jpg" alt="image" class="game-image"-->
                             <h3 class="game-name">{{ entry.app_name }}</h3>
@@ -61,5 +62,10 @@
                 {% endif %}
             </div>
         </div>
+
+        <button class="owned-display-btn" onclick="expand()"><span>Display More Games</span></button>
+
     </body>
+
+    <footer></footer>
 </html>
