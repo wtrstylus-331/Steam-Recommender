@@ -12,6 +12,7 @@ class SteamWebInstance:
     api_key: str
     web_api: WebAPI
     profile_summary: dict
+    popular_tags: list[dict[str, list[str]]]
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
