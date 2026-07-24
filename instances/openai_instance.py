@@ -12,13 +12,15 @@ class OpenAIInstance:
         return cls._instance
 
     def __init__(self):
+        self.refresh()
         if self._initialized:
             return
 
+        self._initialized = True
+
+    def refresh(self):
         load_dotenv()
         self.api_key = os.getenv("OPENAI_API_KEY")
 
         if not self.api_key:
-            raise AttributeError("No OpenAI API key stored in .env file able to be assigned to attribute!")
-
-        self._initialized = True
+            print("No OpenAI API key stored in .env file able to be assigned to attribute!")
