@@ -9,6 +9,10 @@ body {
     width: 10px;
 }
 
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
 ::-webkit-scrollbar-thumb {
     background: slateblue;
     border-radius: 5px;
