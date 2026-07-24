@@ -48,9 +48,15 @@
         </div>
 
         <div class="owned-games-div">
-            <h2 class="owned-h2" style="border-radius: {% if game_count > 0 %} 15px 15px 0 0 {% else %} 15px {% endif %}"><span>Games: {% if game_count > 0 %} {{ game_count }} {% elif game_count < 0%} Private {% endif %}</span></h2>
+            <div class="owned-header" style="border-radius: {% if game_count > 0 %} 15px 15px 0 0 {% else %} 15px {% endif %}">
+                <h2 class="owned-h2"><span>Games: {% if game_count > 0 %} {{ game_count }} {% elif game_count < 0%} Private {% endif %}</span></h2>
+                <h2 class="owned-sort-h2" style="display: {% if game_count > 0 %} block {% else %} none {% endif %}"><span>Sort by:</span></h2>
+                <button class="sorting-btn" style="display: {% if game_count > 0 %} block {% else %} none {% endif %}" onclick="sortBy('name')"><span>Name</span></button>
+                <button class="sorting-btn" style="display: {% if game_count > 0 %} block {% else %} none {% endif %}" onclick="sortBy('playtime')" id="playtime-btn"><span>Playtime (Descending)</span></button>
+            </div>
+            <!--h2 class="owned-h2" style="border-radius: {% if game_count > 0 %} 15px 15px 0 0 {% else %} 15px {% endif %}"><span>Games: {% if game_count > 0 %} {{ game_count }} {% elif game_count < 0%} Private {% endif %}</span></h2-->
 
-            <div class="owned-grid" style="opacity: {% if game_count > 0 %} 100% {% else %} 0 {% endif %}">
+            <div class="owned-grid" id="owned-grid-id" style="opacity: {% if game_count > 0 %} 100% {% else %} 0 {% endif %}">
                 {% if game_count > 0 %}
                     {% for entry in games_list %}
                         <div class="owned-game-card" style="display: none;">
@@ -64,6 +70,14 @@
         </div>
 
         <button class="owned-display-btn" onclick="expand()"><span>Display More Games</span></button>
+
+        <div class="ai-summary-info" style="display: {% if openai_key_found > 0 %} block {% else %} none {% endif %}">
+            <h2 class="ai-summary-h2">AI Summary</h2>
+        </div>
+
+        <div class="ai-chat-container" style="display: {% if openai_key_found > 0 %} block {% else %} none {% endif %}">
+
+        </div>
 
     </body>
 
