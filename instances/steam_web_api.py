@@ -12,6 +12,7 @@ class SteamWebInstance:
     api_key: str
     web_api: WebAPI
     profile_summary: dict
+    session_steamid: int
     popular_tags: list[dict[str, list[str]]]
 
     def __new__(cls, *args, **kwargs):
@@ -31,6 +32,9 @@ class SteamWebInstance:
         self.web_api = WebAPI(key=self.api_key)
         self.profile_summary = {}
         self._initialized = True
+
+    def set_steamid(self, steamid: int) -> None:
+        self.session_steamid = steamid
 
     def id_from_vanity_url(self, vanity_id: str) -> int:
         res = dict(self.web_api.call('ISteamUser.ResolveVanityURL', vanityurl=vanity_id, url_type=1))
