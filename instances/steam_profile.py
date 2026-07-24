@@ -1,5 +1,6 @@
 # main web instance for inputted profile to display game inventory, stats, etc.
 from typing import Optional, Union
+from instances.steam_web_api import SteamWebInstance
 
 class SteamGame:
     # attributes
@@ -10,7 +11,14 @@ class SteamGame:
     playtime_forever: int # minutes
     playtime_2weeks: int # optional, minutes
 
-    def __init__(self, app_id: int, app_name: str, app_capsule_hash: str, capsule_file_name: str, playtime_forever: int):
+    def __init__(
+            self,
+            app_id: int,
+            app_name: str,
+            app_capsule_hash: str,
+            capsule_file_name: str,
+            playtime_forever: int
+    ):
         self.app_id = app_id
         self.app_name = app_name
         self.app_capsule_hash = app_capsule_hash
@@ -81,26 +89,13 @@ class SteamProfileInstance:
 
             self._game_set_helper(len(games), games_list=games)
 
-            counter = 0
-            for game in self.current_steam_games:
-                if game.played_recently():
-                    counter += 1
-            self.recent_game_count = counter
+            self.recent_game_count = sum([1 for g in self.current_steam_games if g.played_recently()])
         # except TypeError as e:
         #     pass
         except Exception as e:
             self.steam_game_count = -2
             self.recent_game_count = -2
             return
-
-        # match self.steam_game_count:
-        #     case 0:
-        #         self._stored_games = []
-        #         self.current_steam_games = []
-        #     case n if 1 <= n <= 100:
-        #         self._game_set_helper(n, games)
-        #     case n if 101 <= n:
-        #         self._game_set_helper(75, games)
 
     def _game_set_helper(self, amount: int, games_list: list[dict]) -> None:
         for i in range(amount):
@@ -136,3 +131,17 @@ class SteamProfileInstance:
     def _add_game(self, game: SteamGame) -> None:
         self.current_steam_games.append(game)
         self.steam_games_map[game.app_id] = game
+
+def set_profile_instance() -> SteamProfileInstance:
+    inst = SteamProfileInstance()
+
+    inst.set_profile(SteamWebInstance().profile_summary)
+
+    if inst.steam_profile_id:
+        inst.set_games(
+            SteamWebInstance().get_user_owned_games(
+                inst.steam_profile_id
+            )
+        )
+
+    return inst
