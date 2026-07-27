@@ -1,5 +1,5 @@
 # main web instance for inputted profile to display game inventory, stats, etc.
-from typing import Optional, Union
+import pprint
 from instances.steam_web_api import SteamWebInstance
 
 class SteamGame:
@@ -9,7 +9,8 @@ class SteamGame:
     app_capsule_hash: str
     capsule_file_name: str
     playtime_forever: int # minutes
-    playtime_2weeks: int # optional, minutes
+    playtime_forever_hrs: float
+    playtime_2weeks: int | None # optional, minutes
 
     def __init__(
             self,
@@ -24,6 +25,7 @@ class SteamGame:
         self.app_capsule_hash = app_capsule_hash
         self.capsule_file_name = capsule_file_name
         self.playtime_forever = playtime_forever
+        self.playtime_forever_hrs = self.get_playtime_hrs()
         self.playtime_2weeks = -1
 
     def set_playtime_2weeks(self, playtime: int) -> None:
@@ -34,22 +36,26 @@ class SteamGame:
         return self.playtime_2weeks > 0
 
     def get_playtime_hrs(self) -> float:
-        return float(f"{self.playtime_forever / 60}:.1f")
+        hours = self.playtime_forever / 60
+        return int(hours * 10) / 10
 
     def get_2weeks_playtime_hrs(self) -> float:
-        return float(f"{self.playtime_2weeks / 60}:.1f")
+        hours = self.playtime_2weeks / 60
+        return int(hours * 10) / 10
 
 
 class SteamProfileInstance:
-    # private attributes
     _instance = None
     _stored_games: list[dict]
+    _displayed_index: int
 
     # attributes
-    steam_profile_id: Optional[int]
-    steam_profile_name: Optional[str]
+    steam_profile_id: int | None #Optional[int]
+    steam_profile_name: str | None #Optional[str]
     steam_avatar_url: str
     current_steam_games: list[SteamGame]
+    displayed_steam_games: list[SteamGame]
+    displayed_recent_games: list[SteamGame]
     steam_games_map: dict[int, SteamGame]
     steam_game_count: int
     recent_game_count: int
@@ -62,10 +68,13 @@ class SteamProfileInstance:
             self.steam_profile_name = None
             self.steam_avatar_url = ""
         self.current_steam_games = []
+        self.displayed_steam_games = []
+        self.displayed_recent_games = []
         self._stored_games = []
         self.steam_games_map = {}
         self.steam_game_count = 0
         self.recent_game_count = 0
+        self._displayed_index = 0
 
     def set_profile(self, response: dict) -> None:
         """Take in raw dictionary <response> from the ISteamUser.GetPlayerSummaries method call."""
@@ -88,6 +97,10 @@ class SteamProfileInstance:
             self._stored_games = games
 
             self._game_set_helper(len(games), games_list=games)
+            self.sort_games_by_name()
+
+            self.displayed_steam_games = self.current_steam_games[self._displayed_index:self._displayed_index + 8]
+            self._displayed_index += 8
 
             self.recent_game_count = sum([1 for g in self.current_steam_games if g.played_recently()])
         # except TypeError as e:
@@ -102,18 +115,25 @@ class SteamProfileInstance:
             appid: int = int(games_list[i].get("appid"))
             name: str = games_list[i].get("name")
             playtime_forever: int = int(games_list[i].get("playtime_forever"))
-            playtime_2weeks: Union[int, None] = games_list[i].get("playtime_2weeks", None)
+            playtime_2weeks: int | None = games_list[i].get("playtime_2weeks", None)
             capsule_hash: str = games_list[i].get("img_icon_url")
             capsule_file_name: str = games_list[i].get("capsule_filename")
 
             g_instance = SteamGame(appid, name, capsule_hash, capsule_file_name, playtime_forever)
+            is_recent = False
             if playtime_2weeks:
                 g_instance.set_playtime_2weeks(int(playtime_2weeks))
+                is_recent = True
 
-            self._add_game(g_instance)
+            self._add_game(g_instance, is_recent)
 
     def get_games(self) -> list[SteamGame]:
-        return self.current_steam_games
+        return self.displayed_steam_games
+
+    def get_to_lazyload(self) -> list[SteamGame]:
+        out = self.current_steam_games[self._displayed_index : self._displayed_index + 8]
+        self._displayed_index += 8
+        return out
 
     def reset_games(self) -> None:
         self.current_steam_games = []
@@ -121,16 +141,23 @@ class SteamProfileInstance:
 
     def sort_games_by_appid(self) -> None:
         self.current_steam_games.sort(key=lambda x: x.app_id, reverse=False)
+        self.displayed_steam_games.sort(key=lambda x: x.app_id, reverse=False)
 
     def sort_games_by_name(self) -> None:
         self.current_steam_games.sort(key=lambda x: x.app_name, reverse=False)
+        self.displayed_steam_games.sort(key=lambda x: x.app_name, reverse=False)
 
     def sort_games_by_playtime(self, descending: bool=False) -> None:
         self.current_steam_games.sort(key=lambda x: x.playtime_forever, reverse=descending)
+        self.displayed_steam_games.sort(key=lambda x: x.playtime_forever, reverse=descending)
 
-    def _add_game(self, game: SteamGame) -> None:
+    def _add_game(self, game: SteamGame, is_recent: bool) -> None:
+        if is_recent:
+            self.displayed_recent_games.append(game)
+
         self.current_steam_games.append(game)
         self.steam_games_map[game.app_id] = game
+
 
 def set_profile_instance() -> SteamProfileInstance:
     inst = SteamProfileInstance()
