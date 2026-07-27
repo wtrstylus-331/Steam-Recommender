@@ -125,8 +125,8 @@ function sortPlaytime(games, type) {
     games.sort((a, b) => {
         const a_text = a.querySelector(".game-playtime").textContent.toLowerCase().split(" ")[0].trim()
         const b_text = b.querySelector(".game-playtime").textContent.toLowerCase().split(" ")[0].trim()
-        const game1 = parseInt(a_text)
-        const game2 = parseInt(b_text)
+        const game1 = parseFloat(a_text)
+        const game2 = parseFloat(b_text)
 
         if (type === sortMethod.Playtime_Ascending) {
             return game1 - game2;
