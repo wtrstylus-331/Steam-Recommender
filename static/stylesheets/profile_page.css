@@ -376,7 +376,19 @@ footer {
     text-align: center;
     font-size: 0.9vw;
     margin-top: 2px;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
+    background: linear-gradient(45deg, #5132ad, #42a3e4);
+    background-clip: text;
+    color: transparent;
+    font-weight: bolder;
+    text-shadow: rgba(255, 255, 255, 0.25) 0 0 4px;
+}
+
+.game-playtime {
+    text-align: center;
+    font-size: 0.8vw;
+    margin-top: 0;
+    margin-bottom: 4px;
     background: linear-gradient(45deg, #5132ad, #42a3e4);
     background-clip: text;
     color: transparent;
