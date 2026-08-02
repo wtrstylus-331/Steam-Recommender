@@ -1,6 +1,4 @@
-import json
 import os, requests, steamspypi
-from typing import Union
 
 from dotenv import load_dotenv
 from steam.webapi import WebAPI
@@ -76,7 +74,7 @@ class SteamWebInstance:
 #     return None
 
 # more condensed approach
-def misc_app_details(appid: int, tag_limit: int=5) -> Union[dict[str, list], None]:
+def misc_app_details(appid: int, tag_limit: int=7) -> dict[str, list] | None:
     """Returns a dictionary of lists of genres and tags respectively from the provided <appid>."""
     result = {}
 
