@@ -279,10 +279,10 @@ footer {
     filter: drop-shadow(black 0 3px 5px);
 }
 
-.sorting-btn:hover {
+/*.sorting-btn:hover {
     transition-duration: 300ms;
     font-size: 1.3vw;
-}
+}*/
 
 .sorting-btn span{
     position: relative;
