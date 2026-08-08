@@ -1,6 +1,4 @@
 # main web instance for inputted profile to display game inventory, stats, etc.
-import pprint
-from instances.steam_web_api import SteamWebInstance
 
 class SteamGame:
     # attributes
@@ -157,18 +155,3 @@ class SteamProfileInstance:
 
         self.current_steam_games.append(game)
         self.steam_games_map[game.app_id] = game
-
-
-def set_profile_instance() -> SteamProfileInstance:
-    inst = SteamProfileInstance()
-
-    inst.set_profile(SteamWebInstance().profile_summary)
-
-    if inst.steam_profile_id:
-        inst.set_games(
-            SteamWebInstance().get_user_owned_games(
-                inst.steam_profile_id
-            )
-        )
-
-    return inst
