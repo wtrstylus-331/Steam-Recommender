@@ -1,7 +1,9 @@
-import os, requests, steamspypi
+import os, steamspypi
 
 from dotenv import load_dotenv
 from steam.webapi import WebAPI
+from instances.steam_profile import SteamGame
+
 
 class SteamWebInstance:
     _instance = None
@@ -74,13 +76,13 @@ class SteamWebInstance:
 #     return None
 
 # more condensed approach
-def misc_app_details(appid: int, tag_limit: int=7) -> dict[str, list] | None:
-    """Returns a dictionary of lists of genres and tags respectively from the provided <appid>."""
+def misc_app_details(game: SteamGame, tag_limit: int=5) -> dict | None:
+    """Returns a dictionary of lists of genres and tags respectively from the provided <SteamGame> object."""
     result = {}
 
     data_request = {
         'request': 'appdetails',
-        'appid': f'{appid}'
+        'appid': f'{game.app_id}'
     }
     data: dict = steamspypi.download(data_request)
 
@@ -94,6 +96,8 @@ def misc_app_details(appid: int, tag_limit: int=7) -> dict[str, list] | None:
         tags_dict.pop(max_)
         counter -= 1
 
+    result['name'] = game.app_name
+    result['playtime'] = game.playtime_forever
     result['genres'] = genre_list
     result['tags'] = tag_list
 
