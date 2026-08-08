@@ -1,21 +1,22 @@
 import json
 
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, StreamingHttpResponse
 from django.template import loader
 
 from instances.steam_profile import SteamProfileInstance
-from instances.steam_web_api import SteamWebInstance
-from instances.openai_instance import OpenAIInstance
+from instances.steam_web_api import SteamWebInstance, misc_app_details
+from instances.openai_instance import OpenAIInstance, Models
 import re, pprint
 
 steam_profile_instance: SteamProfileInstance | None = None
+ai_instance: OpenAIInstance = OpenAIInstance()
 def index(request):
     template = loader.get_template("index.html")
     return HttpResponse(template.render({}, request))
 
 def validate_url(request):
     url: str = request.GET.get("url", "")
-    URL_PATTERN: str = r"(?:https|http):\/\/steamcommunity\.com\/(?:id|profiles)\/([a-zA-Z0-9-]+)\/{0,1}"
+    URL_PATTERN: str = r"(?:https|http):\/\/steamcommunity\.com\/(?:id|profiles)\/([a-zA-Z0-9-_!@#$%^&*()| ]+)\/{0,1}"
 
     if not url:
         return JsonResponse({
@@ -85,26 +86,42 @@ def sort_games(request):
     return JsonResponse({"error": "Invalid request method", "sorted": False}, status=405)
 
 def lazyload_games(request):
-    if request.method == "POST":
-        try:
-            global steam_profile_instance
+    #if request.method == "POST":
+    try:
+        global steam_profile_instance
+        print(steam_profile_instance is None)
 
-            games_json = [
-                {
-                    "app_id": g.app_id,
-                    "app_name": g.app_name,
-                    "playtime_forever_hrs": g.playtime_forever_hrs,
-                    "capsule_hash": g.app_capsule_hash,
-                    "capsule_file_name": g.capsule_file_name,
-                }
-                for g in steam_profile_instance.get_to_lazyload()
-            ]
+        games_json = [
+            {
+                "app_id": g.app_id,
+                "app_name": g.app_name,
+                "playtime_forever_hrs": g.playtime_forever_hrs,
+                "capsule_hash": g.app_capsule_hash,
+                "capsule_file_name": g.capsule_file_name,
+            }
+            for g in steam_profile_instance.get_to_lazyload()
+        ]
 
-            return JsonResponse({"sorted": True, "games": games_json}, status=200)
+        return JsonResponse({"sorted": True, "games": games_json}, status=200)
 
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON", "sorted": False}, status=400)
-    return JsonResponse({"error": "Invalid request method", "sorted": False}, status=405)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON", "sorted": False}, status=400)
+    #return JsonResponse({"error": "Invalid request method", "sorted": False}, status=405)
+
+def set_model(request):
+    try:
+        data = json.loads(request.body)
+        model = data.get("model")
+        global ai_instance
+
+        if model in Models:
+            ai_instance.model = model
+            return JsonResponse({"response": True}, status=200)
+        else:
+            return JsonResponse({"response": False}, status=400)
+
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON", "response": False}, status=400)
 
 def faq(request):
     template = loader.get_template("faq.html")
@@ -131,6 +148,35 @@ def profile(request):
         'recent_games_list': steam_profile_instance.displayed_recent_games,
         'game_count': steam_profile_instance.steam_game_count,
         'recent_game_count': steam_profile_instance.recent_game_count,
-        'openai_key_found': 1 if OpenAIInstance().api_key is not None else 0
+        'openai_key_found': 1 if ai_instance.api_key is not None else 0
     }
     return HttpResponse(template.render(context, request))
+
+def generate_summary(request):
+    if request.method == "GET":
+        try:
+            recent_details: list[dict] = [
+                misc_app_details(x)
+                for x in steam_profile_instance.displayed_recent_games if x.get_playtime_hrs() > 1.0
+            ]
+
+            return JsonResponse({"response": False}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON", "response": False}, status=400)
+    return JsonResponse({"error": "Invalid request method", "response": False}, status=405)
+
+def send_message(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            message = ai_instance.send_message(data.get("prompt"))
+
+            return StreamingHttpResponse(
+                message,
+                content_type="text/plain"
+            , status=200)
+
+            #return JsonResponse({"response": message}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON", "response": False}, status=400)
+    return JsonResponse({"error": "Invalid request method", "response": False}, status=405)
