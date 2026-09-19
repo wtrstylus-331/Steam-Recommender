@@ -279,11 +279,6 @@ footer {
     filter: drop-shadow(black 0 3px 5px);
 }
 
-/*.sorting-btn:hover {
-    transition-duration: 300ms;
-    font-size: 1.3vw;
-}*/
-
 .sorting-btn span{
     position: relative;
     display: flex;
@@ -418,6 +413,47 @@ footer {
     align-self: center;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 2vh;
     position: relative;
+    background: #131924;
+}
+
+.chat-header {
+    display: flex;
+    flex-direction: row;
     background: #b40b04;
+    padding-bottom: 1vh;
+    padding-top: 1vh;
+}
+
+.chat-label {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: auto;
+    margin-left: 0.5vw;
+    font-size: 1.5vw;
+    font-family: "Segoe UI", system-ui, sans-serif, bold;
+    font-weight: bold;
+}
+
+.model-label {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    font-size: 1.5vw;
+    font-family: "Segoe UI", system-ui, sans-serif, bold;
+    font-weight: bold;
+}
+
+.ai-model-dropdown {
+    margin-right: 0.5vw;
+    margin-left: 0.25vw;
+}
+
+#user-chat-field {
+
+}
+
+.user-chat-submit-btn {
+
 }
