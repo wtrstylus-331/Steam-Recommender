@@ -148,7 +148,7 @@ def profile(request):
         'recent_games_list': steam_profile_instance.displayed_recent_games,
         'game_count': steam_profile_instance.steam_game_count,
         'recent_game_count': steam_profile_instance.recent_game_count,
-        'openai_key_found': 1 if ai_instance.api_key is not None else 0
+        'openai_key_found': 1 if ai_instance.get_api_key() is not None else 0
     }
     return HttpResponse(template.render(context, request))
 
