@@ -8,8 +8,11 @@ const sortMethod = {
 }
 let currSortMethod = null
 
+let currModel = "gpt-5.6-luna"
+
 document.addEventListener("DOMContentLoaded", () => {
     currSortMethod = sortMethod.Name
+    document.getElementById('name-btn').style.background = "#273040"
 })
 
 function image_load_error(img) {
@@ -33,9 +36,55 @@ function expand(count) {
     }
 }
 
+async function sendUserMessage() {
+    let msg = document.getElementById("user-chat-field").value
+
+    const response = await fetch("/send-message/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({ prompt: msg })
+    })
+
+    if (!response.ok) {
+        return
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        let response = ""
+
+        const curr_val = decoder.decode(value)
+        response += curr_val
+        console.log(curr_val);
+    }
+    //console.log(data)
+}
+
+async function setModel() {
+    let selection = document.getElementById("ai-model-select")
+    currModel = selection.value
+
+    const response = await fetch("/set-model/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({ model: currModel })
+    })
+    //console.log(`curr option: ${selection.value}`)
+}
+
 async function lazyLoad() {
     const response = await fetch("/lazyload/", {
-        method: "POST",
+        //method: "POST",
         headers: {
             "Content-Type": "application/json",
             "X-CSRFToken": getCookie("csrftoken")
@@ -47,7 +96,7 @@ async function lazyLoad() {
     }
 
     const data = await response.json();
-    console.log(data)
+    //console.log(data)
 
     let grid = document.getElementById('owned-grid-id')
     data.games.forEach(game => {
@@ -85,15 +134,19 @@ async function lazyLoad() {
 
 function getCookie(name) {
     const value = `; ${document.cookie}`
-    console.log(document.cookie)
+    //console.log(document.cookie)
     const parts = value.split(`; ${name}=`)
     if (parts.length === 2) return parts.pop().split(";").shift()
 }
 
 function sortBy(type) {
     const games = Array.from(document.querySelectorAll(".owned-game-card"));
+    const btn = document.getElementById(type.concat('-btn'))
+    let other
 
     if (type === 'playtime') {
+        other = document.getElementById('name-btn')
+
         if (document.querySelector("#playtime-btn span").textContent === "Playtime (Descending)") {
             document.querySelector("#playtime-btn span").textContent = "Playtime (Ascending)"
             currSortMethod = sortMethod.Playtime_Descending
@@ -103,10 +156,15 @@ function sortBy(type) {
             currSortMethod = sortMethod.Playtime_Ascending
             sortPlaytime(games, sortMethod.Playtime_Ascending)
         }
+
     } else {
+        other = document.getElementById('playtime-btn')
         currSortMethod = sortMethod.Name
         sortNames(games)
     }
+
+    btn.style.background = "#273040"
+    other.style.background = "#131924"
 
     let grid = document.getElementById('owned-grid-id')
     grid.innerHTML = "";
