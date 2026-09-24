@@ -10,6 +10,8 @@ cdn_capsule_routes.txt
 sample_player_summary.json
 sample_appdetails.json
 
+.idea/
+
 # C extensions
 *.so
 
