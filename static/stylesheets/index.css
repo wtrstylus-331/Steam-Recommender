@@ -97,6 +97,9 @@ body {
     opacity: 0;
     position: relative;
     animation: 1s ease-out 1s forwards url-input-drop;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .url-input h3{
@@ -126,9 +129,9 @@ body {
     font-family: "Segoe UI", system-ui, sans-serif;
     display: block;
     margin-left: auto;
-    margin-right: 20px;
+    margin-right: auto;
     border-radius: 15px;
-    width: 40vw;
+    width: 30vw;
     height: 24px;
     outline: none;
     font-size: 18px;
@@ -146,12 +149,36 @@ body {
     transition-duration: 500s;
 }
 
+#steam_id_input {
+    font-family: "Segoe UI", system-ui, sans-serif;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 15px;
+    width: 20vw;
+    height: 24px;
+    outline: none;
+    font-size: 18px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: -15px;
+    background: #131924;
+    border-color: #131021;
+    filter: drop-shadow(black 0 3px 5px);
+    color: lightgray;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-bottom: 2px;
+    transition-duration: 500s;
+}
 
 #submit_url_btn {
     font-family: "Segoe UI", system-ui, sans-serif;
     margin-right: auto;
+    margin-left: auto;
+    margin-top: 3vh;
     position: relative;
-    bottom: 15px;
     border-radius: 15px;
     background: #131924;
     border-color: #131021;
@@ -169,7 +196,6 @@ body {
 #submit_url_btn:hover {
     transition-duration: 300ms;
     font-size: 15px;
-    bottom: 17px;
 }
 
 .extra-display {
@@ -178,8 +204,13 @@ body {
     color: transparent;
     font-weight: bolder;
     font-size: 11px;
-    position: relative;
     /*margin: auto;*/
+    position: fixed;
+    bottom: 0.5vw;
+    left: .5vw;
+    right: .5vw;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
     text-shadow: rgba(255, 255, 255, 0.15) 0 0 4px;
 }
@@ -197,26 +228,26 @@ body {
     font-weight: bolder;
     font-size: 11px;
     position: relative;
-    margin-top: -10px;
+    margin-top: 5px;
     text-align: center;
     text-shadow: rgba(255, 255, 255, 0.15) 0 0 4px;
 }
 
 @keyframes show_invalid_label {
     0% {
-        margin-top: -15px;
+        margin-top: -5px;
         opacity: 0;
     }
     20% {
-        margin-top: -10px;
+        margin-top: 5px;
         opacity: 100%;
     }
     80% {
-        margin-top: -10px;
+        margin-top: 5px;
         opacity: 100%;
     }
     100% {
-        margin-top: -15px;
+        margin-top: -5px;
         opacity: 0;
     }
 }
