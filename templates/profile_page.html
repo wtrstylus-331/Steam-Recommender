@@ -22,7 +22,11 @@
         </div>
 
         <div class="user-section">
-            <img class="user_avatar" src="{{ avatar_url }}" alt="user avatar">
+            <div class="user_avatar">
+                <img src="{{ avatar_url }}" alt="user avatar">
+                <div class="status_indicator" id="user-status-indicator" style="background: {% if persona_state == 1 %} {% if is_playing_game == 1 %} green {% else %} dodgerblue {% endif %} {% else %} gray {% endif %}"></div>
+            </div>
+
             <div class="user-info-texts">
                 <h1 class="steam_persona">{{ persona_name }}</h1>
                 <h4 class="steam_id">ID: {{ steam_id }}</h4>
