@@ -5,10 +5,16 @@ from openai import OpenAI
 from dotenv import load_dotenv
 from enum import Enum
 
+dev_prompt = "You are an assistant inside a Steam‑style game profile web app.\nYou help users explore their game library by spotting playtime trends and answering questions.\n\nTone: friendly, conversational, concise, technically accurate.\n\nBehavior:\nResponses must fit a chat UI; use short paragraphs.\nReference only game data provided by the user or backend.\nGive clear reasoning for insights or recommendations.\nSummarize patterns when asked about Steam data.\nAnswer off‑topic questions normally but keep the same tone.\nNever invent game data.\n\nTools/Info Sources:\nFor Steam‑related lookups, rely only on store.steampowered.com, steamcommunity.com, and steamdb.info.\nAsk for clarification when user intent is unclear.\n\nStyle:\nNatural, human‑like, helpful.\nAvoid robotic or overly formal phrasing.\nUse light formatting (lists, short sections) only when useful.\n\nGoal:\nProvide context‑aware, helpful responses that enhance the user’s experience in the game profile interface."
+
 class Models(Enum):
     """
     Enum class to declare GPT models
     """
+    GPT_ASTRA_6 = "gpt-6-astra"
+    GPT_SOL_6 = "gpt-6-sol"
+    GPT_LUNA_6 = "gpt-6-luna"
+
     GPT_SOL_5_6 = "gpt-5.6-sol"
     GPT_TERRA_5_6 = "gpt-5.6-terra"
     GPT_LUNA_5_6 = "gpt-5.6-luna"
@@ -39,7 +45,7 @@ class OpenAIInstance:
     def _initialize(self) -> None:
         load_dotenv()
         self._api_key = os.getenv("OPENAI_API_KEY")
-        self.model = Models.GPT_LUNA_5_6.value
+        self.model = Models.GPT_LUNA_6.value
 
         if not self._api_key:
             print("No OpenAI API key found!")
@@ -69,18 +75,18 @@ class OpenAIInstance:
         self.history.clear()
         self._set_developer_content()
 
-    def _set_developer_content(self) -> None:
-        self.history.append(
-            {
-                "role": "developer",
-                "content": [
-                    {
-                        "type": "input_text",
-                        "text": "You are an assistant inside a Steam‑style game profile web app.\nYou help users explore their game library by spotting playtime trends and answering questions.\n\nTone: friendly, conversational, concise, technically accurate.\n\nBehavior:\nResponses must fit a chat UI; use short paragraphs.\nReference only game data provided by the user or backend.\nGive clear reasoning for insights or recommendations.\nSummarize patterns when asked about Steam data.\nAnswer off‑topic questions normally but keep the same tone.\nNever invent game data.\n\nTools/Info Sources:\nFor Steam‑related lookups, rely only on store.steampowered.com, steamcommunity.com, and steamdb.info.\nAsk for clarification when user intent is unclear.\n\nStyle:\nNatural, human‑like, helpful.\nAvoid robotic or overly formal phrasing.\nUse light formatting (lists, short sections) only when useful.\n\nGoal:\nProvide context‑aware, helpful responses that enhance the user’s experience in the game profile interface."
-                    }
-                ]
-            }
-        )
+    # def _set_developer_content(self) -> None:
+    #     self.history.append(
+    #         {
+    #             "role": "developer",
+    #             "content": [
+    #                 {
+    #                     "type": "input_text",
+    #                     "text": "You are an assistant inside a Steam‑style game profile web app.\nYou help users explore their game library by spotting playtime trends and answering questions.\n\nTone: friendly, conversational, concise, technically accurate.\n\nBehavior:\nResponses must fit a chat UI; use short paragraphs.\nReference only game data provided by the user or backend.\nGive clear reasoning for insights or recommendations.\nSummarize patterns when asked about Steam data.\nAnswer off‑topic questions normally but keep the same tone.\nNever invent game data.\n\nTools/Info Sources:\nFor Steam‑related lookups, rely only on store.steampowered.com, steamcommunity.com, and steamdb.info.\nAsk for clarification when user intent is unclear.\n\nStyle:\nNatural, human‑like, helpful.\nAvoid robotic or overly formal phrasing.\nUse light formatting (lists, short sections) only when useful.\n\nGoal:\nProvide context‑aware, helpful responses that enhance the user’s experience in the game profile interface."
+    #                 }
+    #             ]
+    #         }
+    #     )
 
     def send_message(self, message: str) -> Generator[str, Any, None]:
         """
@@ -104,6 +110,7 @@ class OpenAIInstance:
 
         current_response = self.client.responses.create(
             model=self.model,
+            instructions=dev_prompt,
             input=self.history,
             text={
                 "format": {
