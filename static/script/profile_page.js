@@ -13,7 +13,35 @@ let currModel = "gpt-5.6-luna"
 document.addEventListener("DOMContentLoaded", () => {
     currSortMethod = sortMethod.Name
     document.getElementById('name-btn').style.background = "#273040"
+    getUserState()
 })
+
+async function getUserState() {
+    const response = await fetch("/get-user-status/", {
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+    })
+
+    if (!response.ok) {
+        return
+    }
+
+    let statusIndicator = document.getElementById(`user-status-indicator`)
+
+    const data = await response.json();
+    console.log(data)
+    if (data.personaState === 1) {
+        if (data.playingGameId === null) {
+            statusIndicator.style.background = "dodgerblue"
+        } else {
+            statusIndicator.style.background = "green"
+        }
+    } else {
+        statusIndicator.style.background = "gray"
+    }
+}
 
 function image_load_error(img) {
     console.log("Failed to load game capsule for " + img.alt)
