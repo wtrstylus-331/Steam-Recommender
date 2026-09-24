@@ -21,19 +21,18 @@
         </div>
 
         <div class="url-input">
-            <h3>Enter Steam Profile URL:</h3>
-            <div style="display: flex; justify-content: center">
-                <input type="text" value="" id="steam_url_input" onfocusin="focus_in()" onfocusout="focus_out()" placeholder="https://steamcommunity.com/...">
-                <button id="submit_url_btn" onclick="validate_url()">Submit</button>
-            </div>
+            <h3>Enter Steam Profile URL or Steam ID/Display Name:</h3>
+            <input type="text" value="" id="steam_url_input" onfocusin="focus_in()" onfocusout="focus_out()" placeholder="https://steamcommunity.com/... or abc123...">
+            <button id="submit_url_btn" onclick="validate_url()">Submit</button>
         </div>
 
         <div class="invalid-label" id="err_url_label">
-            <h2>Invalid URL</h2>
+            <h2>Invalid Entry</h2>
         </div>
 
         <div class="extra-display" id="ext_display">
             <h3>Valid Steam URL Formats:<br><br>    - https://steamcommunity.com/profiles/76561....<br>    - https://steamcommunity.com/id/abc123...</h3>
+            <h3>Steam ID/Display Name:<br><br>    - Case sensitive input<br>    - Must match what is displayed on steam profile/profile url</h3>
         </div>
     </body>
 
