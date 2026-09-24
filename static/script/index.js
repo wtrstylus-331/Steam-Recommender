@@ -27,9 +27,9 @@ async function validate_url() {
     if (jsonResponse.valid_url === false) {
         if (text === '') {
             //console.log("no text")
-            err_label.children[0].innerHTML = 'No URL Provided'
+            err_label.children[0].innerHTML = 'No entry provided'
         } else {
-            err_label.children[0].innerHTML = 'Invalid URL'
+            err_label.children[0].innerHTML = 'Invalid Entry'
         }
 
         err_label.style.animation = 'none'
@@ -38,28 +38,4 @@ async function validate_url() {
     } else {
         window.location.href = `/profile/?url=${encodeURIComponent(text)}`
     }
-
-    // const xhttp = new XMLHttpRequest();
-    // xhttp.onload = function () {
-    //     const res = JSON.parse(this.responseText)
-    //
-    //     if (res.valid_url === false) {
-    //         if (text === '') {
-    //             //console.log("no text")
-    //             err_label.children[0].innerHTML = 'No URL Provided'
-    //         } else {
-    //             err_label.children[0].innerHTML = 'Invalid URL'
-    //         }
-    //
-    //         err_label.style.animation = 'none'
-    //         err_label.offsetWidth
-    //         err_label.style.animation = 'show_invalid_label 1s normal forwards'
-    //     } else {
-    //         window.location.href = `/profile/?url=${encodeURIComponent(text)}`
-    //     }
-    //     //console.log(this.responseText)
-    //     //console.log(res.valid_url)
-    // }
-    // xhttp.open("GET", `/validate/?url=${encodeURIComponent(text)}`)
-    // xhttp.send();
 }
