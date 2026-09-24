@@ -16,41 +16,87 @@ def index(request):
 
 def validate_url(request):
     url: str = request.GET.get("url", "")
-    URL_PATTERN: str = r"(?:https|http):\/\/steamcommunity\.com\/(?:id|profiles)\/([a-zA-Z0-9-_!@#$%^&*()| ]+)\/{0,1}"
+    URL_PATTERN: str = r"(?:https|http):\/\/steamcommunity\.com\/(?:id|profiles)\/([a-zA-Z0-9-_\!\@\#\$\%\^\&\*\(\)\| ]+)\/{0,1}"
+    ID_PATTERN: str = r"^^(?!https?:\/\/steamcommunity\.com\/(?:id|profiles)\/)[a-zA-Z0-9=\+\[\]\{\}\;\:\'\"\,\.\<\>\?\/\\\!\@\#\$\%\^\&\*\(\)\|\-_ ]+$"
 
     if not url:
         return JsonResponse({
             "valid_url": False,
             "steamid": None,
-            "msg": "url not found"
+            "msg": "entry not found"
         })
 
-    result = re.match(URL_PATTERN, url)
+    result_url = re.match(URL_PATTERN, url)
+    result_id = re.match(ID_PATTERN, url)
+    steam_instance = SteamWebInstance()
+    steamid: int
+    print(result_url)
+    print(result_id)
+
+    try:
+        if result_url is not None:
+            if result_url.groups()[0].isdigit():
+                steamid = int(result_url.groups()[0])
+            else:
+                steamid = steam_instance.id_from_vanity_url(result_url.groups()[0])
+            steam_instance.set_summary_from_id(steamid)
+            steam_instance.set_steamid(steamid)
+        elif result_id is not None:
+            print(url)
+            steamid = steam_instance.id_from_vanity_url(url)
+            steam_instance.set_summary_from_id(steamid)
+            steam_instance.set_steamid(steamid)
+        else:
+            return JsonResponse({
+                "valid_url": False,
+                "steamid": None,
+                "msg": "invalid entry provided"
+            })
+
+        print(((steam_instance.profile_summary.get('response').get('players'))[0]).get('personastate'))
+
+        return JsonResponse({
+            "valid_url": True,
+            "steamid": steamid,
+            "message": "valid steam entry"
+        })
+    except Exception as e:
+        return JsonResponse({"valid_url": False, "steamid": None, "message": str(e)})
+
+def validate_id(request):
+    id: str = request.GET.get("id", "")
+    ID_PATTERN: str = r"^/^[a-zA-Z0-9-_\-\=\_\+\[\]\{\}\;\:\'\"\,\.\<\>\?\/\\\!\@\#\$\%\^\&\*\(\)\| ]+$/gm"
+
+    if not id:
+        return JsonResponse({
+            "valid_id": False,
+            "steamid": None,
+            "msg": "id/display name not found"
+        })
+
+    result = re.match(ID_PATTERN, id)
     if not result:
         return JsonResponse({
-            "valid_url": False,
+            "valid_id": False,
             "steamid": None,
-            "msg": "invalid steam url format provided"
+            "msg": "invalid steam id/display name provided"
         })
 
     steam_instance = SteamWebInstance()
     try:
-        if result.groups()[0].isdigit():
-            steamid = int(result.groups()[0])
-        else:
-            steamid = steam_instance.id_from_vanity_url(result.groups()[0])
+        steamid = steam_instance.id_from_vanity_url(result.groups()[0])
 
         steam_instance.set_summary_from_id(steamid)
         steam_instance.set_steamid(steamid)
         print(((steam_instance.profile_summary.get('response').get('players'))[0]).get('personastate'))
 
         return JsonResponse({
-            "valid_url": True,
+            "valid_id": True,
             "steamid": steamid,
-            "message": "valid steam url"
+            "message": "valid steam id/display name"
         })
     except Exception as e:
-        return JsonResponse({"valid_url": False, "steamid": None, "message": str(e)})
+        return JsonResponse({"valid_id": False, "steamid": None, "message": str(e)})
 
 def sort_games(request):
     if request.method == "POST":
