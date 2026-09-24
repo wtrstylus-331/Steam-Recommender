@@ -57,6 +57,8 @@ class SteamProfileInstance:
     steam_games_map: dict[int, SteamGame]
     steam_game_count: int
     recent_game_count: int
+    personaState: int | None  # 0 means offline, 1 means online/in-game
+    playingGameId: int | None
 
     def __init__(self, summary: dict=None):
         if summary:
@@ -73,6 +75,8 @@ class SteamProfileInstance:
         self.steam_game_count = 0
         self.recent_game_count = 0
         self._displayed_index = 0
+        self.personaState = None
+        self.playingGameId = None
 
     def set_profile(self, response: dict) -> None:
         """Take in raw dictionary <response> from the ISteamUser.GetPlayerSummaries method call."""
@@ -80,6 +84,8 @@ class SteamProfileInstance:
         self.steam_profile_id = int(details["steamid"])
         self.steam_profile_name = details["personaname"]
         self.steam_avatar_url = details["avatarfull"]
+        self.personaState = details.get("personastate")
+        self.playingGameId = details.get("gameid")
 
     def set_games(self, response: dict) -> None:
         """Take in raw dictionary <response> from the SteamUser.GetOwnedGames method call."""
