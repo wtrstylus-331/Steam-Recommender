@@ -42,6 +42,7 @@ def validate_url(request):
 
         steam_instance.set_summary_from_id(steamid)
         steam_instance.set_steamid(steamid)
+        print(((steam_instance.profile_summary.get('response').get('players'))[0]).get('personastate'))
 
         return JsonResponse({
             "valid_url": True,
@@ -140,9 +141,14 @@ def profile(request):
     games = steam_instance.get_user_owned_games(steam_profile_instance.steam_profile_id)
     steam_profile_instance.set_games(games)
 
+    is_playing: int = (1 if steam_profile_instance.personaState is 1
+                           and steam_profile_instance.playingGameId is not None else 0)
+
     context = {
         'steam_id': steam_profile_instance.steam_profile_id,
         'persona_name': steam_profile_instance.steam_profile_name,
+        'persona_state': steam_profile_instance.personaState,
+        'is_playing_game': is_playing,
         'avatar_url': steam_profile_instance.steam_avatar_url,
         'games_list': steam_profile_instance.get_games(),
         'recent_games_list': steam_profile_instance.displayed_recent_games,
@@ -151,6 +157,20 @@ def profile(request):
         'openai_key_found': 1 if ai_instance.get_api_key() is not None else 0
     }
     return HttpResponse(template.render(context, request))
+
+def get_user_status(request):
+    try:
+        steam_instance = SteamWebInstance()
+        profile_summary = steam_instance.get_summary_from_id(steam_instance.session_steamid)
+
+        details = profile_summary["response"]["players"][0]
+
+        return JsonResponse({
+            "personaState": details.get("personastate"),
+            "playingGameId": details.get("gameid")
+        })
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON", "personaState": None, "playingGameId": None}, status=400)
 
 def generate_summary(request):
     if request.method == "GET":
