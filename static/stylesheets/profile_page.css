@@ -116,7 +116,7 @@ footer {
     background: #131924;
     width: 24vw;
     padding-top: 15px;
-    padding-bottom: 15px;
+    padding-bottom: 0;
     border-radius: 15px;
     margin-left: auto;
     margin-right: auto;
@@ -134,7 +134,7 @@ footer {
     text-shadow: rgba(255, 255, 255, 0.25) 0 0 4px;
 }
 
-.user_avatar {
+.user_avatar img {
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 1) 0 0 6px;
     margin-right: 0.7vw;
@@ -143,6 +143,23 @@ footer {
     height: 10vw;
     position: relative;
     transform: translateZ(0);
+    -webkit-mask:
+    radial-gradient(circle 1vw at 95% 95%, transparent 100%, black 100%);
+    mask:
+    radial-gradient(circle 1vw at 95% 95%, transparent 100%, black 100%);
+}
+
+.status_indicator {
+    position: relative;
+    position-anchor: inherit;
+    width: 1.45vw;
+    height: 1.45vw;
+    border-radius: 50%;
+    background: green;
+    box-shadow: inset rgba(0, 0, 0, 1) 0 0 3px;
+    z-index: 2;
+    bottom: 1.48vw;
+    left: 8.8vw;
 }
 
 .steam_persona {
@@ -262,7 +279,7 @@ footer {
     margin-top: 1.2em;
     margin-bottom: 0.8em;
     display: flex;
-    font-size: 1.2vw;
+    font-size: 1vw;
     font-family: "Segoe UI", system-ui, sans-serif;
     background: #131924;
     border-color: #131021;
@@ -271,8 +288,6 @@ footer {
     border-radius: .5em;
     padding-left: .5em;
     padding-right: .5em;
-    /*max-height: 2em;*/
-    /*padding-bottom: .3em;*/
     color: lightgray;
     cursor: pointer;
     transition-duration: 300ms;
