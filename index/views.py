@@ -63,40 +63,40 @@ def validate_url(request):
     except Exception as e:
         return JsonResponse({"valid_url": False, "steamid": None, "message": str(e)})
 
-def validate_id(request):
-    id: str = request.GET.get("id", "")
-    ID_PATTERN: str = r"^/^[a-zA-Z0-9-_\-\=\_\+\[\]\{\}\;\:\'\"\,\.\<\>\?\/\\\!\@\#\$\%\^\&\*\(\)\| ]+$/gm"
-
-    if not id:
-        return JsonResponse({
-            "valid_id": False,
-            "steamid": None,
-            "msg": "id/display name not found"
-        })
-
-    result = re.match(ID_PATTERN, id)
-    if not result:
-        return JsonResponse({
-            "valid_id": False,
-            "steamid": None,
-            "msg": "invalid steam id/display name provided"
-        })
-
-    steam_instance = SteamWebInstance()
-    try:
-        steamid = steam_instance.id_from_vanity_url(result.groups()[0])
-
-        steam_instance.set_summary_from_id(steamid)
-        steam_instance.set_steamid(steamid)
-        print(((steam_instance.profile_summary.get('response').get('players'))[0]).get('personastate'))
-
-        return JsonResponse({
-            "valid_id": True,
-            "steamid": steamid,
-            "message": "valid steam id/display name"
-        })
-    except Exception as e:
-        return JsonResponse({"valid_id": False, "steamid": None, "message": str(e)})
+# def validate_id(request):
+#     id: str = request.GET.get("id", "")
+#     ID_PATTERN: str = r"^/^[a-zA-Z0-9-_\-\=\_\+\[\]\{\}\;\:\'\"\,\.\<\>\?\/\\\!\@\#\$\%\^\&\*\(\)\| ]+$/gm"
+#
+#     if not id:
+#         return JsonResponse({
+#             "valid_id": False,
+#             "steamid": None,
+#             "msg": "id/display name not found"
+#         })
+#
+#     result = re.match(ID_PATTERN, id)
+#     if not result:
+#         return JsonResponse({
+#             "valid_id": False,
+#             "steamid": None,
+#             "msg": "invalid steam id/display name provided"
+#         })
+#
+#     steam_instance = SteamWebInstance()
+#     try:
+#         steamid = steam_instance.id_from_vanity_url(result.groups()[0])
+#
+#         steam_instance.set_summary_from_id(steamid)
+#         steam_instance.set_steamid(steamid)
+#         print(((steam_instance.profile_summary.get('response').get('players'))[0]).get('personastate'))
+#
+#         return JsonResponse({
+#             "valid_id": True,
+#             "steamid": steamid,
+#             "message": "valid steam id/display name"
+#         })
+#     except Exception as e:
+#         return JsonResponse({"valid_id": False, "steamid": None, "message": str(e)})
 
 def sort_games(request):
     if request.method == "POST":
@@ -183,18 +183,21 @@ def profile(request):
     if not steam_instance.session_steamid:
         return index(request)
 
+    pprint.pprint(steam_instance.profile_summary)
     steam_profile_instance.set_profile(steam_instance.profile_summary)
     games = steam_instance.get_user_owned_games(steam_profile_instance.steam_profile_id)
     steam_profile_instance.set_games(games)
 
     is_playing: int = (1 if steam_profile_instance.personaState is 1
-                           and steam_profile_instance.playingGameId is not None else 0)
+                           and steam_profile_instance.playingGame else 0)
+    game_name: str = steam_profile_instance.playingGameName
 
     context = {
         'steam_id': steam_profile_instance.steam_profile_id,
         'persona_name': steam_profile_instance.steam_profile_name,
         'persona_state': steam_profile_instance.personaState,
         'is_playing_game': is_playing,
+        'playing_game_name': game_name,
         'avatar_url': steam_profile_instance.steam_avatar_url,
         'games_list': steam_profile_instance.get_games(),
         'recent_games_list': steam_profile_instance.displayed_recent_games,
