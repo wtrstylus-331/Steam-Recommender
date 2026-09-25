@@ -14,7 +14,22 @@ document.addEventListener("DOMContentLoaded", () => {
     currSortMethod = sortMethod.Name
     document.getElementById('name-btn').style.background = "#273040"
     getUserState()
+
+    const indicator = document.getElementById("user-status-indicator");
+
+    indicator.addEventListener("mouseenter", enterStatus);
+    indicator.addEventListener("mouseleave", exitStatus);
 })
+
+function enterStatus() {
+    let popup = document.getElementById("user-status-desc")
+    popup.style.bottom = "2%"
+}
+
+function exitStatus() {
+    let popup = document.getElementById("user-status-desc")
+    popup.style.bottom = "-10%"
+}
 
 async function getUserState() {
     const response = await fetch("/get-user-status/", {
