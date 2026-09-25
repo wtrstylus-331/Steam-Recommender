@@ -34,6 +34,10 @@
             </div>
         </div>
 
+        <div class="status_description" id="user-status-desc">
+            <p>{{ persona_name }} is {% if persona_state == 1 %} {% if is_playing_game == 1 %} playing {{ playing_game_name }} {% else %} online {% endif %} {% else %} offline {% endif %}</p>
+        </div>
+
         <div class="recently-played">
             <h2 class="recent-h2" style="border-radius: {% if recent_game_count > 0 %} 15px 15px 0 0 {% else %} 15px {% endif %}"><span>Recently Played Games: {% if game_count > 0 %} {{ recent_game_count }} {% elif game_count < 0%} Private {% endif %}</span></h2>
             <div class="recent-grid" style="opacity: {% if recent_game_count > 0 %} 100% {% else %} 0 {% endif %}">
