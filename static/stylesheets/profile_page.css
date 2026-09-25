@@ -162,6 +162,31 @@ footer {
     left: 8.8vw;
 }
 
+.status_description {
+    position: fixed;
+    background: #131924;
+    padding: .5vw;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 1) 0 2px 10px;
+    z-index: 2;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -10%;
+    transition-duration: 1s;
+}
+
+.status_description p {
+    margin: 0;
+    font-size: 1.5vw;
+    position: relative;
+    background: linear-gradient(45deg, #5132ad, #42a3e4);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-weight: bolder;
+    text-shadow: rgba(255, 255, 255, 0.25) 0 0 4px;
+}
+
 .steam_persona {
     margin-left: 0.7vw;
     margin-right: 0;
