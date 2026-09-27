@@ -88,6 +88,68 @@ class OpenAIInstance:
     #         }
     #     )
 
+    def retrieve_user_summary(self, relevant_details: list[dict[str, list[str] | str | int]]) -> dict[str, list[str]] | None | str:
+        """
+        Sends a concise message to generate a dictionary with two keys,
+        the top genres, and the top tags based on the user's most recent gameplay
+        which is provided via <relevant_details>.
+
+        Returns the response as a dictionary to be easily translated
+        into visuals on the frontend, otherwise return None if the client
+        is not initialized.
+        """
+        if not self.client:
+            return None
+
+        message = {
+            "role": "user",
+            "content": [
+                {"type": "input_text", "text": "With the provided information about the user's most recent activity, provide the top list of genres and game tags that fit for this user for future game recommendations. Output should be in a concise json format with two keys, 'genres' and 'tags', with values being strictly list of strings."},
+                {"type": "input_text", "text": str(relevant_details)}
+            ]
+        }
+        msg_list = [message]
+        current_response = self.client.responses.create(
+            model=self.model,
+            instructions=dev_prompt,
+            input=msg_list,
+            text={
+                "format": {
+                    "type": "text"
+                },
+                "verbosity": "medium"
+            },
+            reasoning={
+                "effort": "medium",
+                "mode": "standard",
+                "summary": "auto"
+            },
+            tools=[
+                {
+                    "type": "web_search",
+                    "user_location": {
+                        "type": "approximate"
+                    },
+                    "search_context_size": "medium",
+                    "filters": {
+                        "allowed_domains": [
+                            "steamdb.info",
+                            "store.steampowered.com",
+                            "steamcommunity.com"
+                        ]
+                    }
+                }
+            ],
+            store=False,
+            include=[
+                "reasoning.encrypted_content",
+                "web_search_call.action.sources"
+            ],
+            stream=False
+        )
+
+        return current_response.output_text
+
     def send_message(self, message: str) -> Generator[str, Any, None]:
         """
         Sends the <message> provided into OpenAI, and returns OpenAI's response.
