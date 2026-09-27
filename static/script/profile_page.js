@@ -79,6 +79,17 @@ function expand(count) {
     }
 }
 
+async function userSummary() {
+    let jsonResponse = await req();
+
+    async function req() {
+        return fetch(`/generate-summary/`, {
+        method: 'GET'
+        }).then(response => response.json());
+    }
+    console.log(jsonResponse)
+}
+
 async function sendUserMessage() {
     let msg = document.getElementById("user-chat-field").value
 
