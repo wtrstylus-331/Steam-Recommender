@@ -13,7 +13,8 @@ class SteamWebInstance:
     web_api: WebAPI
     profile_summary: dict
     session_steamid: int
-    popular_tags: list[dict[str, list[str]]]
+    relevant_recent_data: list
+    generated_summary: bool
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
@@ -31,6 +32,8 @@ class SteamWebInstance:
 
         self.web_api = WebAPI(key=self.api_key)
         self.profile_summary = {}
+        self.relevant_recent_data = []
+        self.generated_summary = False
         self._initialized = True
 
     def set_steamid(self, steamid: int) -> None:
@@ -48,6 +51,9 @@ class SteamWebInstance:
     def set_summary_from_id(self, steamid: int) -> None:
         summary = self.web_api.call('ISteamUser.GetPlayerSummaries', key=self.api_key, steamids=steamid)
         self.profile_summary = summary
+
+    def set_relevant_recent_data(self, data: list[dict[str, list[str] | str | int]]) -> None:
+        self.relevant_recent_data = data
 
     def get_user_owned_games(self, steamid: int,
                              show_app_info: bool = True,
@@ -76,7 +82,7 @@ class SteamWebInstance:
 #     return None
 
 # more condensed approach
-def misc_app_details(game: SteamGame, tag_limit: int=5) -> dict | None:
+def misc_app_details(game: SteamGame, tag_limit: int=5) -> dict[str, list[str] | str | int] | None:
     """Returns a dictionary of lists of genres and tags respectively from the provided <SteamGame> object."""
     result = {}
 
