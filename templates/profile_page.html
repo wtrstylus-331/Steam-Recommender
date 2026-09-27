@@ -16,6 +16,9 @@
         <div class="header-section">
             <div><img class="logo_image" src="{% static 'images/favicon_color.svg' %}" alt="icon"></div>
             <div><h1 class="header-title">Steam Profile</h1></div>
+            <button onclick="window.location.href='{% url 'index' %}'" class="home_btn">
+                <img class="home_image" src="{% static 'images/home_color.svg' %}" alt="home">
+            </button>
             <button onclick="window.location.href='{% url 'faq' %}'" class="faq_btn" id="faq_btn_id">
                 <img class="faq_image" src="{% static 'images/question_color.svg' %}" alt="faq">
             </button>
@@ -84,7 +87,7 @@
 
         <div class="ai-summary-info" style="display: {% if openai_key_found > 0 %} block {% else %} none {% endif %}">
             <h2 class="ai-summary-h2">AI Summary</h2>
-            <button class="summary-generation" id="summary-gen-btn">Generate Summary</button>
+            <button class="summary-generation" id="summary-gen-btn" onclick="userSummary()">Generate Summary</button>
             <div class="summary-grid">
 
             </div>
@@ -95,9 +98,21 @@
                 <h2 class="chat-label">Chat</h2>
                 <label class="model-label" for="ai-model-select">Model: </label>
                 <select class="ai-model-dropdown" name="ai-model" id="ai-model-select" onchange="setModel()">
+                    <option value="gpt-6-astra">GPT 6 Astra</option>
+                    <option value="gpt-6-sol">GPT 6 Sol</option>
+                    <option value="gpt-6-luna">GPT 6 Luna</option>
+
                     <option value="gpt-5.6-luna">GPT 5.6 Luna</option>
                     <option value="gpt-5.6-terra">GPT 5.6 Terra</option>
                     <option value="gpt-5.6-sol">GPT 5.6 Sol</option>
+
+                    <option value="gpt-5.5-pro">GPT 5.5 Pro</option>
+                    <option value="gpt-5.5">GPT 5.5</option>
+
+                    <option value="gpt-5.4-pro">GPT 5.4 Pro</option>
+                    <option value="gpt-5.4">GPT 5.4</option>
+                    <option value="gpt-5.4-mini">GPT 5.4 Mini</option>
+                    <option value="gpt-5.4-nano">GPT 5.4 Nano</option>
                 </select>
             </div>
             <div class="chat-messages-grid">
