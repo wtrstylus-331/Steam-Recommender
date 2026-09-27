@@ -63,41 +63,6 @@ def validate_url(request):
     except Exception as e:
         return JsonResponse({"valid_url": False, "steamid": None, "message": str(e)})
 
-# def validate_id(request):
-#     id: str = request.GET.get("id", "")
-#     ID_PATTERN: str = r"^/^[a-zA-Z0-9-_\-\=\_\+\[\]\{\}\;\:\'\"\,\.\<\>\?\/\\\!\@\#\$\%\^\&\*\(\)\| ]+$/gm"
-#
-#     if not id:
-#         return JsonResponse({
-#             "valid_id": False,
-#             "steamid": None,
-#             "msg": "id/display name not found"
-#         })
-#
-#     result = re.match(ID_PATTERN, id)
-#     if not result:
-#         return JsonResponse({
-#             "valid_id": False,
-#             "steamid": None,
-#             "msg": "invalid steam id/display name provided"
-#         })
-#
-#     steam_instance = SteamWebInstance()
-#     try:
-#         steamid = steam_instance.id_from_vanity_url(result.groups()[0])
-#
-#         steam_instance.set_summary_from_id(steamid)
-#         steam_instance.set_steamid(steamid)
-#         print(((steam_instance.profile_summary.get('response').get('players'))[0]).get('personastate'))
-#
-#         return JsonResponse({
-#             "valid_id": True,
-#             "steamid": steamid,
-#             "message": "valid steam id/display name"
-#         })
-#     except Exception as e:
-#         return JsonResponse({"valid_id": False, "steamid": None, "message": str(e)})
-
 def sort_games(request):
     if request.method == "POST":
         try:
@@ -192,6 +157,13 @@ def profile(request):
                            and steam_profile_instance.playingGame else 0)
     game_name: str = steam_profile_instance.playingGameName
 
+    recent_details: list[dict] = [
+        misc_app_details(x)
+        for x in steam_profile_instance.displayed_recent_games if x.get_playtime_hrs() > 1.0
+    ]
+    steam_instance.set_relevant_recent_data(recent_details)
+    pprint.pprint(steam_instance.relevant_recent_data)
+
     context = {
         'steam_id': steam_profile_instance.steam_profile_id,
         'persona_name': steam_profile_instance.steam_profile_name,
@@ -203,7 +175,8 @@ def profile(request):
         'recent_games_list': steam_profile_instance.displayed_recent_games,
         'game_count': steam_profile_instance.steam_game_count,
         'recent_game_count': steam_profile_instance.recent_game_count,
-        'openai_key_found': 1 if ai_instance.get_api_key() is not None else 0
+        'openai_key_found': 1 if ai_instance.get_api_key() is not None else 0,
+        'generated_summary': 1 if steam_instance.generated_summary else 0
     }
     return HttpResponse(template.render(context, request))
 
@@ -226,10 +199,12 @@ def generate_summary(request):
         try:
             recent_details: list[dict] = [
                 misc_app_details(x)
-                for x in steam_profile_instance.displayed_recent_games if x.get_playtime_hrs() > 1.0
+                for x in steam_profile_instance.displayed_recent_games if x.get_playtime_hrs() >= 0.5
             ]
+            message = ai_instance.retrieve_user_summary(recent_details)
+            print(message)
 
-            return JsonResponse({"response": False}, status=200)
+            return JsonResponse({"genres": message.get('genres'), "tags": message.get("tags")}, status=200)
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON", "response": False}, status=400)
     return JsonResponse({"error": "Invalid request method", "response": False}, status=405)
